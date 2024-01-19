@@ -1,0 +1,21 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.p-carousel-next{
+    
+    position: absolute;
+    right: 40px ;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+}
+.p-carousel-prev{   
+    
+    position: absolute;
+    left: 40px ;
+    z-index: 1;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.p-carousel-item{
+   position: relative;
+}
