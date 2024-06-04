@@ -4,9 +4,9 @@
          <div class="md:container flex  justify-center">
               <div>
                 <h2>infor</h2>
-                <h1>{{User.firtname}}</h1>
-                
-                
+                <h1>{{User.firstname}}</h1>
+                <h1>{{User.email}}</h1>
+                <h1>{{User.mobile}}</h1>
               </div>     
 
          </div>

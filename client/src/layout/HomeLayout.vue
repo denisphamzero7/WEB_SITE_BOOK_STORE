@@ -1,17 +1,17 @@
 <template>
-    <div class="w-full flex flex-col ">
-      <div>
-        <HeaderTop/>
-       <HeaderMidlle />
-       <HeaderBottom/>
-      </div>
-      <div>
-        <slot/>
-      </div>
-      <div>
-        <FooterBottom/>
-      </div>
+  <div class="w-full flex flex-col min-h-screen">
+    <div class="sticky top-0 z-50 bg-white">
+      <HeaderTop/>
+      <HeaderMidlle />
+      <HeaderBottom/>
     </div>
+    <div class="flex-grow">
+      <slot/>
+    </div>
+    <div>
+      <FooterBottom/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,16 +21,10 @@ import HeaderTop from '../components/Header-Top.vue'
 import HeaderBottom from '../components/Header-Bottom.vue'
 
 export default {
-    components: {HeaderTop,HeaderMidlle,HeaderBottom,FooterBottom},
-    name:'Home-Layout',
-    setup () {
-        
-
-        return {}
-    }
+  components: {HeaderTop, HeaderMidlle, HeaderBottom, FooterBottom},
+  name: 'Home-Layout',
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>

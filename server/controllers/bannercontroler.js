@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 const createBanner = asyncHandler(async (req, res) => {
     const {name } = req.body
     
-    console.log('a',image)
+ 
     if(!image || !name) throw new Error('missing input')
     const banner = await Banner.create({
         images: image,

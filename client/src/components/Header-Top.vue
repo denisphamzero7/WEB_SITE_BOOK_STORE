@@ -12,7 +12,7 @@
         <RouterLink :to="{ name: 'signup-Page' }"><span class="cursor-pointer">Đăng ký</span> </RouterLink>
       </div>
       <div v-else class="text-xs font-semibold flex gap-3 items-center">
-        <span>{{User && User.firtname ? User.firtname : 'Guest'}}</span>
+        <span>{{User && User.firstname ? User.firstname : 'Guest'}}</span>
         <button class="flex items-center w-full gap-1 border-2  p-1" @click="logout">
           <span class="pi pi-sign-out"></span>
           <h1> log out</h1>
@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     ...mapActions('user', ['logout']),
+   
   },
 };
 </script>

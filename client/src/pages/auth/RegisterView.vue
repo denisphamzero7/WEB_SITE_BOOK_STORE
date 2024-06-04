@@ -9,7 +9,7 @@
        <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
    </div>
 
-   <div @click.prevent="signup">
+   <div @click.prevent="success">
        <label for="firstname" class="block text-900 font-medium mb-2">first name</label>
        <InputText v-model="payload.firstname" id="firstname" type="text" class="w-full mb-3 border-2" />
 
@@ -30,6 +30,13 @@
        <MyCustomButton  label="Sign up" type="submit"  class="w-full bg-blue-500 "></MyCustomButton>
    </div>
 </div>
+<Toast
+        :message="Toast.message"
+        :duration="3000"
+        :position="Toast.position"
+        :backgroundcolor="Toast.backgroundcolor"
+        @close="clearToast"
+      />
   </div>
 </template>
 
@@ -37,9 +44,10 @@
 import { mapActions } from 'vuex';
 import MyCustomButton from 'primevue/button';
 import InputText from 'primevue/InputText';
+import Toast from '@/components/Toast.vue';
 export default {
    components:{
-       MyCustomButton,InputText
+       MyCustomButton,InputText,Toast
    },
    data() {
     return {
@@ -51,13 +59,48 @@ export default {
         password: "",
         
       },
+      Toast: {
+        message: '',
+        position: '',
+        backgroundcolor: ''
+      },
     }},
     methods:{
-        ...mapActions(['register']),
-        signup(){
-            this.register(this.payload);
+        ...mapActions('user',['register']),
+        async success() {
+      try {
+        const response = await this.register(this.payload)
+        console.log(response)
+        if (response) {
+          this.Toast = {
+            message: 'register successful!',
+            position: 'bottom-right',
+            backgroundcolor: 'success'
+          }
+          setTimeout(() => {
+            router.push({ name: 'Login-Page' })
+          }, 200)
+        } else {
+          this.Toast = {
+            message: 'register failed',
+            position: 'bottom-right',
+            backgroundcolor: 'error'
+          }
         }
+      } catch (error) {
+        console.log('Error response from server:', error)
+        this.Toast = {
+          message: 'register error!',
+          position: 'top-right',
+          backgroundcolor: 'error'
+        }
+      }
+    },
+
+    clearToast() {
+      this.Toast.message = ''
     }
+  }
 }
 </script>
 

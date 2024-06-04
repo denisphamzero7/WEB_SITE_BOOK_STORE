@@ -28,7 +28,7 @@ var productSchema = new mongoose.Schema(
     },
     released:{
       type: Date,
-      required: true,
+     
     },
     description: {
       type: String,
@@ -44,7 +44,7 @@ var productSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "ProductCategory",
     },
     quantity: {
       type: Number,
@@ -76,40 +76,9 @@ var productSchema = new mongoose.Schema(
         default: 0,
       },
     ],
-    depth:{
-      type: Number,
+    bookcategory:{
+      type:Array
     },
-    spinewidth:{
-      type: Number,
-    },
-    weight:{
-      type: Number,
-    },
-    hight:{
-      type: Number,
-    },
-    width:{
-      type: Number,
-    },
-    No_of_Pages:{
-       type: Number,
-    },
-    isbn_13:{
-      type: Number,
-    },
-    isbn_10:{
-      type: Number,
-    },
-    Binding:{
-      type: String,
-    },
-    series_title:{
-      type: String,
-    },
-    subtitle:{
-      type: String,
-    }
-
   },
   {
     timestamps: true,

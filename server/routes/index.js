@@ -8,7 +8,7 @@ const BlogRouter = require("./blog")
 const PublisherRouter = require("./publisher")
 const CouponRouter = require("./coupon")
 const OrderRouter = require("./order")
-
+const BookCategory = require("./bookcategory")
 const {notFound ,errHandler}= require("../middlewares/errorhandler")
 const initrouter = (app) => {
     app.use('/api/user',useRouter)
@@ -21,6 +21,7 @@ const initrouter = (app) => {
     app.use('/api/publisher',PublisherRouter)
     app.use('/api/coupon', CouponRouter)
     app.use('/api/order', OrderRouter )
+    app.use('/api/bookcategory', BookCategory )
     app.use(notFound)
     app.use(errHandler)
 }

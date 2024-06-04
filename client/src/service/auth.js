@@ -4,10 +4,11 @@ class AuthService {
     try {
       const response = await axios.post('/user/login', {email,password})
       // Extract access token and user data from the response
-      const { accessToken, userData } = response;
+      const {accessToken,userData} = response;
        // Save the access token and user data to local storage
        localStorage.setItem('accessToken', accessToken);
        localStorage.setItem('userData', JSON.stringify(userData));
+   
       return response;
     } catch (error) {
       console.error('Login failed:', error);
@@ -16,16 +17,24 @@ class AuthService {
   }
   async register(data) {
     try {
-      const response = await axios.post('/user/register', data)
+      const response = await axios.post('user/register', data)
       return response
     } catch (error) {
       console.log(error);
     }
   }
-  async refeshtoken(data) {
-    const response = await axios.post('user/refreshtoken/', data)
-    return response
+  async refreshtoken(data) {
+    try {
+      const response = await axios.post('user/refreshtoken/', data);
+      const newAccessToken = response.accessToken;
+      localStorage.setItem('accessToken', newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error('Refresh token failed:', error);
+      throw error;
+    }
   }
+  
 
   
 }

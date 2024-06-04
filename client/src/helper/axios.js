@@ -16,7 +16,6 @@ instance.interceptors.request.use((config) => {
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
-
     return config;
 }, (error) => {
   return Promise.reject(error);
@@ -26,8 +25,10 @@ instance.interceptors.response.use(function (response) {
     // Làm gì đó với dữ liệu response
     return response.data;
   }, function (error) {
-    // Bất kì mã trạng thái nào lọt ra ngoài tầm 2xx đều khiến hàm này được trigger\
-    // Làm gì đó với lỗi response
+    if (error.response.status === 401) {
+      // Nếu lỗi là unauthorized (401), chuyển hướng đến trang đăng nhập
+      router.push('/login');
+    }
     return Promise.reject(error);
   });
 

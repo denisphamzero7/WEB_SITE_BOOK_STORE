@@ -18,12 +18,10 @@ app.use(cors({
     corOptions,
     methods:['POST', 'PUT', 'DELETE','GET'],
 }));
-
-
 // đọc cookie
 app.use(cookieParser());
 initrouter(app)
 
 app.listen(port,()=>{
-    console.log('running localhost ',+ port)
+    console.log('running localhost:',port)
 })

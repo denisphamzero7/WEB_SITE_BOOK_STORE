@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const Product = require("../models/product");
 const Author = require("../models/author");
-const Publisher = require("../models/publisher");
+const Order = require("../models/order")
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
-const { response, json } = require("express");
+const User  = require("../models/user")
 const author = require("../models/author");
+const axios = require("axios");
+
 // const upload = require('../middlewares/upload');
 // create a new product
 const createProduct = asyncHandler(async (req, res) => {
@@ -22,6 +24,7 @@ const createProduct = asyncHandler(async (req, res) => {
         });
       }
       const imagePaths = req.files ? req.files.filter(i => i.path).map(i => i.path) : [];
+      
       const newProduct = await Product.create({...req.body, images: imagePaths});
 
   if (req.body.author) {
@@ -37,7 +40,6 @@ const createProduct = asyncHandler(async (req, res) => {
       });
     }
   }
-
   return res.status(200).json({
     success: newProduct ? true : false,
     createProduct: newProduct ? newProduct : "cannot create new product",
@@ -81,7 +83,11 @@ const allProducts = asyncHandler(async (req, res) => {
   queryCommand
     .skip(skip)
     .limit(limit)
-    .populate("author publisher", "name title");
+    .populate("author publisher category", "name title")
+    .populate({
+      path:'bookcategory',
+      select:'title',
+     })
 
   // execute query
   try {
@@ -106,10 +112,18 @@ const getAnProduct = asyncHandler(async (req, res) => {
     product.images = req.files[0].path;
     await product.save();
   }
-  const product = await Product.findById(pid).populate(
+  const product = await Product.findById(pid)
+  .populate(
     "author publisher",
     "name title"
-  );
+  ).populate({
+    path:'rating',
+    populate:{
+     path:'postedBy',
+     select:'firstname lastname avatar',
+    }
+   })
+   .populate("bookcategory")
   return res.status(200).json({
     success: true ? true : false,
     mess: product ? product : "no product found",
@@ -118,7 +132,6 @@ const getAnProduct = asyncHandler(async (req, res) => {
 // update An Product
 const updateAnProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  
   const product = await Product.findByIdAndUpdate(pid, req.body, { new: true })
     .populate("author", " name")
     .select("-listProduct");
@@ -128,9 +141,11 @@ const updateAnProduct = asyncHandler(async (req, res) => {
     mess: product ? "success" : "failure",
   });
 });
+
 // delete an product
 const deleteAnProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findByIdAndDelete(req.params.pid, req.body, {
+  const {pid}= req.params;
+  const product = await Product.findByIdAndDelete(pid, req.body, {
     new: true,
   });
   return res.status(200).json({
@@ -151,8 +166,6 @@ const deleteAllProduct = asyncHandler(async (req, res) => {
 
 const uploadImage = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  console.log("cc", pid);
-   
   if (!pid) throw new Error("Missing product ID");
   if (!req.files) throw new Error("missing inputs");
   const existingProduct = await Product.findById(pid);
@@ -181,7 +194,6 @@ const ratings = asyncHandler(async (req, res) => {
   const { id } = req.user;
   const { start, comments, pid } = req.body;
 
-  // Kiểm tra xem start và id có tồn tại, nếu không, ném một lỗi
   if (!start || !id) {
     throw new Error("Missing input");
   }
@@ -234,6 +246,58 @@ const ratings = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Recommend products
+// @route GET /api/products/recommend/:q
+// @access Private
+const recommendProduct = asyncHandler(async (req, res) => {
+  const productId = req.params.q;
+  let response = [];
+  try {
+    const productRating = await Product.find({
+      rating: {
+        $elemMatch: { postedBy: req.user._id }
+      }
+    
+    })
+    console.log(productRating);
+
+    if (
+      productRating == null ||
+      productRating == undefined ||
+      productRating.length == 0
+    ) {
+      const recommend = await axios.get(
+        `http://127.0.0.1:5500/nonrating?q=${productId}`
+      );
+
+      response = await Product.find({
+        _id: { $in: recommend?.data?.response },
+      }).populate('category');
+
+    } else {
+      const recommend = await axios.get(`http://127.0.0.1:5500/?q=${req.user._id}`);
+
+
+      response = await Product.find({
+        _id: { $in: recommend?.data?.response },
+      }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } })
+
+      console.log(response)
+    }
+
+    if (response.length !== 0) {
+      res.json({ success: true, products: response });
+    } else {
+      res.status(500).json({ success: false, Products: [] });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+})
+
+
+
 module.exports = {
   createProduct,
   allProducts,
@@ -243,5 +307,5 @@ module.exports = {
   deleteAllProduct,
   uploadImage,
   ratings,
-  
+  recommendProduct
 };

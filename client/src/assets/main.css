@@ -19,3 +19,31 @@
 .p-carousel-item{
    position: relative;
 }
+@layer components {
+    .card-product{
+        @apply
+     text-gray-700
+        w-60 p-2 bg-slate-100
+        rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl mt-4 mb-4 lg:mt-0
+    }
+    .badge{
+        @apply
+        px-3 py-1 rounded-full text-xs bg-gray-100
+    }
+    
+  
+}
+
+.p-rating-star .p-rating-icon {
+    color: yellow;
+  }
+  .input-field {
+    @apply w-full border rounded py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer;
+  }
+.bgadmin{
+   @apply bg-gray-700
+}
