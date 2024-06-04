@@ -25,7 +25,7 @@ const state = {
     async getAnBlog({ commit },payload) {
         try {
           const response = await BlogService.getanblogs(payload);
-          commit('SET_BLOG',response.blog);
+          commit('SET_BLOG',response.rs);
         } catch (error) {
           console.error('Error fetching blogs:', error);
         }
@@ -49,9 +49,9 @@ const state = {
       },
       async updateBlog({ commit },payload) {
         try {
-          const response = await BlogService.createblogs(payload);
-          console.log(response);
-          commit('SET_BLOG',response);
+          const response = await BlogService.updateblogs(payload);
+          console.log(response.updateblog);
+          commit('SET_BLOG',response.updateblog);
         } catch (error) {
           console.error('Error new blogs:', error);
         }

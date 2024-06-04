@@ -39,7 +39,7 @@ class BlogService{
     }
     async updateblogs(idblog,data) {
         try {
-            const response = await axios.post(`blog/${idblog}`,data)
+            const response = await axios.put(`blog/${idblog}`,data)
             console.log(response)
             return response
         } catch (error) {

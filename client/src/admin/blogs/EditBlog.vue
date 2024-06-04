@@ -4,15 +4,15 @@
       <form @submit.prevent="submitForm">
         <div class="mb-4">
           <label for="title" class="block text-white text-sm font-medium mb-2">Title</label>
-          <input type="text" id="title" v-model="blog.title" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" placeholder="Enter title" required>
+          <input type="text" id="title" v-model="getblog.title" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" placeholder="Enter title" required>
         </div>
         <div class="mb-4">
           <label for="category" class="block text-white text-sm font-medium mb-2">Category</label>
-          <input type="text" id="category" v-model="blog.category" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" placeholder="Enter category" required>
+          <input type="text" id="category" v-model="getblog.category" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" placeholder="Enter category" required>
         </div>
         <div class="mb-4">
           <label for="description" class="block text-white text-sm font-medium mb-2">Description</label>
-          <textarea id="description" v-model="blog.description" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" rows="8" placeholder="Enter description" required></textarea>
+          <textarea id="description" v-model="getblog.description" class="w-full p-2 bg-gray-800 text-white rounded placeholder-gray-500 focus:outline-none focus:bg-gray-900" rows="8" placeholder="Enter description" required></textarea>
         </div>
         <div class="flex justify-end">
           <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Update</button>
@@ -38,7 +38,7 @@
         this.getAnBlog(this.$route.params.bid)
     },
     computed: {
-      ...mapGetters('blog', ['blog']),
+      ...mapGetters('blog', ['getblog']),
     },
     
     methods: {
