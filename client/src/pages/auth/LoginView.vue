@@ -29,7 +29,7 @@
           >
         </div>
 
-        <button type="submit" label="Sign In" class="w-full bg-blue-500"></button>
+        <button type="submit" label="Sign In" class="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600">Login</button>
       </form>
       <Toast
         :message="Toast.message"
