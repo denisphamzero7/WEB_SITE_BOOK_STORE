@@ -9,14 +9,14 @@
 
       <form @submit.prevent="success">
         <label for="email" class="block text-900 font-medium mb-2">Email</label>
-        <input v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2" />
+        <input v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-md p-2" />
 
         <label for="password1" class="block text-900 font-medium mb-2">Password</label>
         <input
           v-model="payload.password"
           id="password"
           type="password"
-          class="w-full mb-3 border-2"
+          class="w-full mb-3 border-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-md p-2"
         />
 
         <div class="flex align-items-center justify-content-between mb-6">
@@ -44,13 +44,13 @@
 
 <script>
 
-
 import { mapActions } from 'vuex'
 import Toast from '../../components/Toast.vue'
 import router from '../../router/index'
 
 export default {
   components: {
+  
     Toast
   },
   data() {

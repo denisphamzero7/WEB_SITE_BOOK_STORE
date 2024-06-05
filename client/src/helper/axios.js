@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: 'https://web-book-api-delta.vercel.app/api/',
   headers:{'Content-Type': 'application/json',}
 });
 
