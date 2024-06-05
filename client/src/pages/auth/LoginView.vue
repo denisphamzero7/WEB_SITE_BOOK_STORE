@@ -9,10 +9,10 @@
 
       <form @submit.prevent="success">
         <label for="email" class="block text-900 font-medium mb-2">Email</label>
-        <InputText v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2" />
+        <input v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2" />
 
         <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-        <InputText
+        <input
           v-model="payload.password"
           id="password"
           type="password"
@@ -29,7 +29,7 @@
           >
         </div>
 
-        <MyCustomButton type="submit" label="Sign In" class="w-full bg-blue-500"></MyCustomButton>
+        <button type="submit" label="Sign In" class="w-full bg-blue-500"></button>
       </form>
       <Toast
         :message="Toast.message"
@@ -43,17 +43,14 @@
 </template>
 
 <script>
-import MyCustomButton from 'primevue/button'
 
-import InputText from 'primevue/InputText'
+
 import { mapActions } from 'vuex'
 import Toast from '../../components/Toast.vue'
 import router from '../../router/index'
 
 export default {
   components: {
-    MyCustomButton,
-    InputText,
     Toast
   },
   data() {

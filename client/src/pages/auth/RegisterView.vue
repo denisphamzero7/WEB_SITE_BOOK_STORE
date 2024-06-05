@@ -17,17 +17,17 @@
        <InputText v-model="payload.lastname" id="lastname" type="text" class="w-full mb-3 border-2" />
 
        <label for="mobile" class="block text-900 font-medium mb-2">mobile</label>
-       <InputText v-model="payload.mobile" id="number" type="number" class="w-full mb-3 border-2" />
+       <input v-model="payload.mobile" id="number" type="number" class="w-full mb-3 border-2" />
 
        <label for="email" class="block text-900 font-medium mb-2">Email</label>
-       <InputText v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2" />
+       <input v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2" />
 
        <label for="password" class="block text-900 font-medium mb-2">Password</label>
-       <InputText v-model="payload.password" id="password" type="password" class="w-full mb-3 border-2" />
+       <input v-model="payload.password" id="password" type="password" class="w-full mb-3 border-2" />
        
        
 
-       <MyCustomButton  label="Sign up" type="submit"  class="w-full bg-blue-500 "></MyCustomButton>
+       <button  label="Sign up" type="submit"  class="w-full bg-blue-500 "></button>
    </div>
 </div>
 <Toast
@@ -42,12 +42,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import MyCustomButton from 'primevue/button';
-import InputText from 'primevue/InputText';
+
 import Toast from '@/components/Toast.vue';
 export default {
    components:{
-       MyCustomButton,InputText,Toast
+  Toast
    },
    data() {
     return {
