@@ -2,7 +2,7 @@
   <div class="p-8">
     <h1 class="text-2xl font-bold mb-6">Order History</h1>
     <div class="overflow-x-auto">
-      <form @submit.prevent="statusOrder" class="flex items-center space-x-4">
+      <form @submit.prevent="statusOrder" class="flex items-center space-x-4 mb-6">
         <select v-model="status" class="block w-64 px-4 py-2 border rounded-md text-gray-700 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
           <option value="">Select status</option>
           <option value="cancelled">Cancelled</option>
@@ -24,12 +24,15 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
+          <tr v-if="!paginatedOrders.length">
+            <td colspan="5" class="py-3 px-4 text-center text-gray-500">No orders found.</td>
+          </tr>
           <tr v-for="(item, index) in paginatedOrders" :key="item._id">
             <td class="py-3 px-4 text-sm text-gray-900">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
             <td class="py-3 px-4 text-sm text-gray-900">
               <ul>
                 <li v-for="el in item.products" :key="el._id" class="flex items-center space-x-2 mb-2">
-                  <img :src="el.product.images[0]" class="w-16 h-16 " alt="">
+                  <img :src="el.product.images[0]" class="w-16 h-16" alt="">
                   <div>
                     <span class="block text-gray-900">{{ el.product.name }}</span>
                     <span class="block text-gray-500">Quantity: {{ el.quantity }}</span>

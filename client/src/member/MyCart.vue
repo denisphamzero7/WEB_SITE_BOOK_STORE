@@ -50,7 +50,7 @@
         <h2 class="text-2xl font-semibold">Thông tin thanh toán</h2>
       </header>
       <div class="flex flex-col justify-between mt-4 space-y-2">
-        <span class="text-gray-800">Tổng giá tiền: {{ totalCartPrice }} VND</span>
+        <span class="text-gray-800">Tổng giá tiền: {{ totalCartPrice }} $</span>
         <router-link :to="{ name: 'check-out' }">
           <div
             class="flex justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

@@ -1,15 +1,27 @@
 <template>
-  <div class="carousel-container overflow-hidden">
-    <div class="carousel" :style="{ transform: 'translateX(' + step + 'px)', width: width + 'px' }">
-      <div class="inner">
-        <Product v-for="product in getFeaturedProducts" :key="product._id" :product="product" :style="{ width: cardWidth + 'px' }"/>
-      </div>
-    </div>
-    <button class="rounded-full ml-3" @click="prev" :disabled="currentIndex === 0">
-      <li class="pi pi-arrow-circle-left text-xl"></li>
+  <div class="relative overflow-hidden">
+    <button
+      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md focus:outline-none z-10"
+      @click="prev"
+    >
+      <i class="pi pi-arrow-circle-left text-xl"></i>
     </button>
-    <button class="rounded-full mr-3" @click="next" :disabled="currentIndex === Math.ceil(getFeaturedProducts.length / visibleCards) - 1">
-      <li class="pi pi-arrow-circle-right text-xl"></li>
+    <div class="flex overflow-hidden">
+      <transition-group v-bind="groupAttrs" class="flex w-full">
+        <Product
+          v-for="(product, index) in getVisibleProducts"
+          :key="product._id"
+          :product="product"
+          class="flex-shrink-0 transition-transform duration-500 ease-in-out"
+          :class="productClass"
+        />
+      </transition-group>
+    </div>
+    <button
+      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md focus:outline-none z-10"
+      @click="next"
+    >
+      <i class="pi pi-arrow-circle-right text-xl"></i>
     </button>
   </div>
 </template>
@@ -22,43 +34,55 @@ export default {
   components: { Product },
   data() {
     return {
-      step: 0,
-      cardWidth: 200,
       currentIndex: 0,
+      visibleCards: 6,
       timer: null,
-      visibleCards: 3
+      windowWidth: window.innerWidth
     }
   },
   computed: {
     ...mapGetters('product', ['getFeaturedProducts']),
-    width() {
-      return this.getFeaturedProducts.length * this.cardWidth
+    getVisibleProducts() {
+      return this.getFeaturedProducts.slice(this.currentIndex, this.currentIndex + this.visibleCards);
+    },
+    productClass() {
+      if (this.windowWidth >= 1024) {
+        return 'w-1/6'; // 6 products
+      } else if (this.windowWidth >= 768) {
+        return 'w-1/4'; // 4 products
+      } else {
+        return 'w-full'; // 1 product
+      }
+    },
+    groupAttrs() {
+      return {
+        name: 'slide-fade',
+        tag: 'div', // Ensure a single root element
+        class: 'flex w-full'
+      }
     }
   },
   mounted() {
-    this.startAutoSlide()
-    this.fetchFeaturedProducts()
+    this.fetchFeaturedProducts();
+    this.startAutoSlide();
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize(); // Set initial visibleCards based on window width
   },
   methods: {
     ...mapActions('product', ['fetchFeaturedProducts']),
-    setStep() {
-      this.step = -this.currentIndex * this.cardWidth;
-    },
     next() {
-      if (this.currentIndex < Math.ceil(this.getFeaturedProducts.length / this.visibleCards) - 1) {
+      if (this.currentIndex < this.getFeaturedProducts.length - this.visibleCards) {
         this.currentIndex++;
       } else {
         this.currentIndex = 0; // Reset to the start if at the end
       }
-      this.setStep();
     },
     prev() {
       if (this.currentIndex > 0) {
         this.currentIndex--;
       } else {
-        this.currentIndex = Math.ceil(this.getFeaturedProducts.length / this.visibleCards) - 1; // Go to the last slide if at the start
+        this.currentIndex = this.getFeaturedProducts.length - this.visibleCards; // Go to the last slide if at the start
       }
-      this.setStep();
     },
     startAutoSlide() {
       this.timer = setInterval(() => {
@@ -67,67 +91,31 @@ export default {
     },
     stopAutoSlide() {
       clearInterval(this.timer)
+    },
+    handleResize() {
+      this.windowWidth = window.innerWidth;
+      if (this.windowWidth >= 1024) {
+        this.visibleCards = 6;
+      } else if (this.windowWidth >= 768) {
+        this.visibleCards = 4;
+      } else {
+        this.visibleCards = 1;
+      }
     }
   },
   beforeDestroy() {
-    this.stopAutoSlide()
+    this.stopAutoSlide();
+    window.removeEventListener('resize', this.handleResize);
   }
 }
 </script>
 
-<style scoped>
-.carousel-container {
-  position: relative;
-}
-
-.carousel, .inner {
-  display: flex;
+<style>
+/* Tailwind CSS classes are used instead of scoped styles */
+.slide-fade-enter-active, .slide-fade-leave-active {
   transition: transform 0.5s ease;
 }
-
-.carousel {
-  overflow: hidden;
-}
-
-.card {
-  overflow: hidden;
-  justify-content: center;
-  white-space: normal;
-  width: 200px;
-}
-
-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  user-select: none;
-}
-
-button:focus {
-  outline: none;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-button:first-child {
-  left: 0;
-}
-
-button:last-child {
-  right: 0;
-}
-
-@media (max-width: 768px) {
-  .card {
-    width: 150px; /* Adjust the card width for smaller screens */
-  }
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(100%);
 }
 </style>

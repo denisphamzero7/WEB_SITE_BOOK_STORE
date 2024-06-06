@@ -43,7 +43,7 @@
               <a-rate :value="getstar" disabled allowHalf />
               <span class="text-lg text-red-600 pl-3">({{ getstar }} đánh giá)</span>
             </div>
-            <span class="text-3xl text-red-600 mt-2 border-b pb-2">Giá: {{ selectedProduct.price }} vnd</span>
+            <span class="text-3xl text-red-600 mt-2 border-b pb-2">Giá: {{ selectedProduct.price }}$</span>
             <p class="font-bold text-lg mt-4 line-clamp-2">{{ selectedProduct.title }}</p>
             <p class="mt-1">Thể loại sách: {{ formatBookCategories(selectedProduct.bookcategory) }}</p>
             <p class="mt-1">Tác giả: {{ selectedProduct.author?.name }}</p>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-red-50">
+  <div class="bg-red-50 hidden md:block">
     <div class="container mx-auto flex items-center justify-between gap-5">
       <div class="logo w-1/3">
         <router-link :to="{ name: 'Home-Page' }">

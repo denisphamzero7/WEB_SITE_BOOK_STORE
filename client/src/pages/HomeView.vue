@@ -4,7 +4,7 @@
         <Banner />
       </div>
       <div class="md:container mx-auto py-4">
-        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <ul class="grid justify-center  grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
           <li class="flex flex-col items-center justify-center gap-3">
             <img src="../assets/icon/icon-truck.png" alt="icon-truck" class="w-20">
             <div class="text-center">

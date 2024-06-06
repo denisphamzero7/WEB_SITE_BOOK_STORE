@@ -224,7 +224,7 @@ export default {
       }
       return this.productDetail.price.toLocaleString('en-US', {
         style: 'currency',
-        currency: 'VND'
+        currency: 'USD'
       })
     },
     productDetail() {
@@ -251,13 +251,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .btn {
   @apply py-2 px-4 rounded-md shadow-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
+
 .btn-red {
   @apply bg-red-500 border-red-500 hover:bg-red-600 hover:border-red-600 focus:ring-red-400 focus:ring-offset-red-200;
 }
+
 .btn-green {
   @apply bg-green-500 border-green-500 hover:bg-green-600 hover:border-green-600 focus:ring-green-400 focus:ring-offset-green-200;
 }

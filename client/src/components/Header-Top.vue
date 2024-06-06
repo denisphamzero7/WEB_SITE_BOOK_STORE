@@ -1,45 +1,35 @@
 <template>
-  <div class="flex justify-between bg-[#f2f3f8] py-2">
-    <div class="md:container flex items-center justify-between">
-      <div class="text-xs font-semibold flex gap-2">
-        <span class="pi pi-phone text-xs">0337335747</span>
+  <div class=" justify-between bg-gray-200 py-2 hidden md:block">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4">
+      <div class="text-xs font-semibold flex gap-2 mb-2 md:mb-0 md:mr-4">
+        <span class="text-xs">0337335747</span>
         <span>|</span>
         <span>Theo dõi đơn hàng</span>
       </div>
       <div class="text-xs font-semibold flex gap-2" v-if="!isAuthenticated">
-        <router-link :to="{ name: 'Login-Page' }"><span class="cursor-pointer">Đăng nhập</span></router-link>
+        <router-link :to="{ name: 'Login-Page' }" class="cursor-pointer">Đăng nhập</router-link>
         <span>/</span>
-        <RouterLink :to="{ name: 'signup-Page' }"><span class="cursor-pointer">Đăng ký</span> </RouterLink>
+        <router-link :to="{ name: 'signup-Page' }" class="cursor-pointer">Đăng ký</router-link>
       </div>
       <div v-else class="text-xs font-semibold flex gap-3 items-center">
-        <span>{{User && User.firstname ? User.firstname : 'Guest'}}</span>
-        <button class="flex items-center w-full gap-1 border-2  p-1" @click="logout">
+        <span>{{ User && User.firstname ? User.firstname : 'Guest' }}</span>
+        <button class="flex items-center gap-1 border-2 p-1" @click="logout">
           <span class="pi pi-sign-out"></span>
-          <h1> log out</h1>
-         </button>
+          <span>Đăng xuất</span>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters,mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
-  data() {
-    return {
-      
-    };
-  },
-  
-
   computed: {
     ...mapGetters('user', ['isAuthenticated', 'User']),
   },
   methods: {
     ...mapActions('user', ['logout']),
-   
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
