@@ -1,9 +1,33 @@
 <template>
   <div class="flex flex-row">
     <!-- Mobile Menu Container -->
-    <div v-if="isMobileMenuOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-      <!-- Mobile Menu Content -->
-      <!-- Your mobile menu content here -->
+    <div v-if="isMenuOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
+      <div class="bg-blue-600 w-2/3 min-h-screen p-5 relative overflow-y-auto border-b-4 border-white">
+        <!-- Close Button -->
+        <button class="absolute top-2 right-2 text-white text-2xl" @click="toggleMenu">
+          &times;
+        </button>
+        <!-- Menu Content -->
+        <div>
+          <div class="flex items-center space-x-3 py-2">
+            <img :src="User.avatar" class="rounded-full w-14 h-14" />
+            <span class="text-xl font-bold text-white">{{ User.firstname }}</span>
+          </div>
+          <ul class="text-white mt-4 flex-grow">
+            <router-link v-for="(link, index) in links" :key="index" :to="link.to"
+              class="flex items-center py-3 px-4 hover:bg-purple-800 cursor-pointer transition-colors duration-200">
+              <i :class="link.icon" class="text-xl mr-3"></i>
+              {{ link.text }}
+            </router-link>
+          </ul>
+          <!-- Logout Button -->
+          <li class="border-t border-purple-800 flex items-center py-3 px-4 hover:bg-purple-800 cursor-pointer transition-colors duration-200"
+              @click="handleLogout">
+            <i class="pi pi-sign-out text-xl mr-3"></i>
+            Log out
+          </li>
+        </div>
+      </div>
     </div>
 
     <!-- SidebarAdmin -->
@@ -13,8 +37,8 @@
       <!-- Mobile Header -->
       <div class="bg-gray-700 md:hidden h-16 flex items-center justify-between px-4">
         <!-- Mobile Menu Toggle Button -->
-        <button class="text-white text-2xl" @click="toggleMobileMenu">
-          <i :class="isMobileMenuOpen ? 'pi pi-arrow-right' : 'pi pi-align-justify'"></i>
+        <button class="text-white text-2xl" @click="toggleMenu">
+          <i :class="isMenuOpen ? 'pi pi-arrow-right' : 'pi pi-align-justify'"></i>
         </button>
       </div>
 
@@ -35,27 +59,12 @@ export default {
   components: { SidebarAdmin },
   data() {
     return {
-      isMobileMenuOpen: false,
+      isMenuOpen: false,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize);
-  },
   methods: {
-    toggleMobileMenu() {
-      this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    },
-    handleResize() {
-      // Check if the window width is greater than or equal to the desktop breakpoint (e.g., 768px)
-      const isDesktop = window.innerWidth >= 768;
-      // Close the mobile menu if the window is in desktop mode
-      if (isDesktop) {
-        this.isMobileMenuOpen = false;
-      }
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
     },
     ...mapActions('user', {
       fetchcurrentuser: 'fetchcurrentuser',
@@ -69,7 +78,15 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['User']),
-    // Your links computed property here
+    links() {
+      return [
+        { to: { name: 'Dashboard' }, text: 'Dashboard', icon: 'pi pi-chart-bar' },
+        { to: { name: 'Products' }, text: 'Products', icon: 'pi pi-list' },
+        { to: { name: 'Users' }, text: 'Users', icon: 'pi pi-users' },
+        { to: { name: 'Orders' }, text: 'Orders', icon: 'pi pi-cart-plus' },
+        { to: { name: 'Blog-Manager' }, text: 'Blogs', icon: 'pi pi-pencil ' },
+      ];
+    },
   },
 };
 </script>
