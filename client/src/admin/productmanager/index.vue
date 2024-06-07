@@ -1,5 +1,7 @@
 <template>
   <div class="p-6 bg-gray-700 min-h-screen">
+
+  
     <!-- Header -->
     <h1 class="flex items-center font-medium text-3xl text-white mb-6">
       <li class="rounded-full bg-[#0f172ab3] p-3 text-xl text-white pi pi-box mr-3"></li>
@@ -29,11 +31,11 @@
           <tr class="bg-gray-800">
             <th class="py-3 px-4">Name</th>
             <th class="py-3 px-4">Image</th>
-            <th class="py-3 px-4">Category</th>
-            <th class="py-3 px-4">Author</th>
-            <th class="py-3 px-4">Description</th>
-            <th class="py-3 px-4">Publisher</th>
-            <th class="py-3 px-4">Quantity</th>
+            <th class="py-3 px-4 hidden md:table-cell">Category</th>
+            <th class="py-3 px-4 hidden md:table-cell">Author</th>
+            <th class="py-3 px-4 hidden md:table-cell">Description</th>
+            <th class="py-3 px-4 hidden md:table-cell">Publisher</th>
+            <th class="py-3 px-4 hidden md:table-cell">Quantity</th>
             <th class="py-3 px-4">Price</th>
             <th class="py-3 px-4">Actions</th>
           </tr>
@@ -52,12 +54,11 @@
                 class="w-16 h-16 object-cover rounded-lg"
               />
             </td>
-            <td class="py-3 px-4">{{ product.category?.title || 'N/A' }}</td>
-            <td class="py-3 px-4">{{ shortText(formatBookCategories(product.bookcategory)||'N/A',20) }}</td>
-            <td class="py-3 px-4">{{ product.author?.name || 'N/A' }}</td>
-           
-            <td class="py-3 px-4">{{ product.publisher?.title || 'N/A' }}</td>
-            <td class="py-3 px-4">{{ product.quantity || 'N/A' }}</td>
+            <td class="py-3 px-4 hidden md:table-cell">{{ product.category?.title || 'N/A' }}</td>
+            <td class="py-3 px-4 hidden md:table-cell">{{ product.author?.name || 'N/A' }}</td>
+            <td class="py-3 px-4 hidden md:table-cell">{{ product.description || 'N/A' }}</td>
+            <td class="py-3 px-4 hidden md:table-cell">{{ product.publisher?.title || 'N/A' }}</td>
+            <td class="py-3 px-4 hidden md:table-cell">{{ product.quantity || 'N/A' }}</td>
             <td class="py-3 px-4">{{ product.price || 0 }}$</td>
             <td class="py-3 px-4">
               <button @click="editProduct(product)" class="text-blue-400 hover:text-blue-600">
@@ -85,6 +86,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Pagination from '../../components/Pagination.vue'
@@ -98,8 +100,10 @@ export default {
       header: 'Products Manager',
       currentPage: 1,
       itemsPerPage: 4,
-      searchQuery: ''
+      searchQuery: '',
+  
     }
+
   },
   mounted() {
     this.fetchProduct()
@@ -125,6 +129,9 @@ export default {
   },
   methods: {
     ...mapActions('product', ['fetchProduct', 'deleteProduct']),
+    togglemenu(){
+      this.menu=!this.menu;
+    },
     shortText(text, maxLength) {
       return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
     },
