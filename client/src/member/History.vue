@@ -2,6 +2,7 @@
   <div class="p-8">
     <h1 class="text-2xl font-bold mb-6">Order History</h1>
     <div class="overflow-x-auto">
+      <!-- Form search -->
       <form @submit.prevent="statusOrder" class="flex items-center space-x-4 mb-6">
         <select v-model="status" class="block w-64 px-4 py-2 border rounded-md text-gray-700 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
           <option value="">Select status</option>
@@ -13,41 +14,51 @@
         </button>
       </form>
 
-      <table class="min-w-full bg-white border border-gray-200 divide-y divide-gray-200">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-if="!paginatedOrders.length">
-            <td colspan="5" class="py-3 px-4 text-center text-gray-500">No orders found.</td>
-          </tr>
-          <tr v-for="(item, index) in paginatedOrders" :key="item._id">
-            <td class="py-3 px-4 text-sm text-gray-900">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-            <td class="py-3 px-4 text-sm text-gray-900">
-              <ul>
-                <li v-for="el in item.products" :key="el._id" class="flex items-center space-x-2 mb-2">
-                  <img :src="el.product.images[0]" class="w-16 h-16" alt="">
-                  <div>
-                    <span class="block text-gray-900">{{ el.product.name }}</span>
-                    <span class="block text-gray-500">Quantity: {{ el.quantity }}</span>
-                  </div>
-                </li>
-              </ul>
-            </td>
-            <td class="py-3 px-4 text-sm text-gray-900">${{ item.total.toFixed(2) }}</td>
-            <td class="py-3 px-4 text-sm text-gray-900">{{ item.status }}</td>
-            <td class="py-3 px-4 text-sm text-gray-900">{{ new Date(item.createdAt).toLocaleDateString() }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 divide-y divide-gray-200">
+          <!-- Table head -->
+          <thead class="bg-gray-100">
+            <!-- Header row -->
+            <tr>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+            </tr>
+          </thead>
+          <!-- Table body -->
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- No orders found -->
+            <tr v-if="!paginatedOrders.length">
+              <td colspan="5" class="py-3 px-4 text-center text-gray-500">No orders found.</td>
+            </tr>
+            <!-- Loop through orders -->
+            <tr v-for="(item, index) in paginatedOrders" :key="item._id">
+              <td class="py-3 px-4 text-sm text-gray-900">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">
+                <ul>
+                  <li v-for="el in item.products" :key="el._id" class="flex items-center space-x-2 mb-2">
+                    <img :src="el.product.images[0]" class="w-16 h-16" alt="">
+                    <div>
+                      <span class="block text-gray-900">{{ el.product.name }}</span>
+                      <span class="block text-gray-500">Quantity: {{ el.quantity }}</span>
+                    </div>
+                  </li>
+                </ul>
+              </td>
+              <td class="py-3 px-4 text-sm text-gray-900">${{ item.total.toFixed(2) }}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">{{ item.status }}</td>
+              <td class="py-3 px-4 text-sm text-gray-900">{{ new Date(item.createdAt).toLocaleDateString() }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <Pagination :totalItems="totalOrders" :itemsPerPage="itemsPerPage" :currentPage="currentPage" @page-changed="handlePageChange" />
+    <!-- Pagination -->
+    <Pagination  :totalItems="totalOrders" :itemsPerPage="itemsPerPage" :currentPage="currentPage" @page-changed="handlePageChange" />
+    <!-- Toast -->
     <Toast :message="Toast.message" :duration="3000" :position="Toast.position" :backgroundcolor="Toast.backgroundcolor" @close="clearToast" />
   </div>
 </template>

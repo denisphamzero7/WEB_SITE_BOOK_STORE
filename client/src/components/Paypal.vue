@@ -1,12 +1,11 @@
 <template>
   <div class="p-6 bg-gray-100 min-h-screen">
     <div v-if="!paidFor" class="text-center">
-      <VueConfetti/>
       <div ref="paypal"></div>
     </div>
 
     <div v-if="paidFor" class="text-center">
-      <h1 class="text-3xl font-bold text-green-500 mb-4">Noice, you bought a beautiful lamp!</h1>
+      <h1 class="text-3xl font-bold text-green-500 mb-4">thanh toán thành công, xin cảm ơn !</h1>
     </div>
   </div>
 </template>
@@ -32,7 +31,7 @@ export default {
 
   mounted() {
     this.loadPayPalScript()
-  
+ 
   },
 
   computed: {
@@ -43,43 +42,33 @@ export default {
   },
 
   methods: {
-    ...mapActions('user', ['updateAddress','fetchcurrentuser','fetchcart']),
-    ...mapActions('order', ['orderproduct',]),
-    startConfetti() {
-      this.$confetti.start();
-    },
-    stopConfetti() {
-      this.$confetti.stop();
-    },
+    ...mapActions('user', ['updateAddress', 'fetchcurrentuser', 'fetchcart']),
+    ...mapActions('order', ['orderproduct']),
+    
+   
+
     async saveOrder() {
       try {
-    //     const products = this.cart.map(item => ({
-    //    product: item.product._id, 
-    //    quantity: item.quantity
-    // }));
         this.orderData = {
           orderBy: this.User._id,
           products: this.cart,
           total: this.totalCartPrice,
           address: this.User.address,
-          status: this.status='success',
-          
+          status: 'success',
         };
         const response = await this.orderproduct(this.orderData);
         if (response) {
           await Promise.all([
-            this.startConfetti(),
             this.updateAddress({ address: this.User.address })
           ]);
           setTimeout(() => this.redirectToHomePage(), 3000);
         }
       } catch (error) {
-        throw new Error(error);
+        this.handleError(error);
       }
     },
 
     redirectToHomePage() {
-      this.stopConfetti();
       this.$router.push({ name: 'Home-Page' });
     },
 
@@ -88,7 +77,6 @@ export default {
       script.src = `https://www.paypal.com/sdk/js?client-id=AduTwFe3bUjZ7kAGgm2-B1Qy-JqOsszatesYcL7vvtdqkwVSdUsv2G1thrtWARGEcJ3njsAUo6qgtJpK&vault=false`
       script.addEventListener('load', () => {
         this.loaded = true;
-       
         this.createPayPalButtons();
       });
       document.body.appendChild(script);
@@ -96,9 +84,9 @@ export default {
 
     createPayPalButtons() {
       window.paypal.Buttons({
-        createOrder: this.createOrder,
-        onApprove: this.handleApproval,
-        onError: this.handleError
+        createOrder: this.createOrder.bind(this),
+        onApprove: this.handleApproval.bind(this),
+        onError: this.handleError.bind(this)
       }).render(this.$refs.paypal)
     },
 
@@ -109,7 +97,8 @@ export default {
             amount: {
               currency_code: 'USD',
               value: this.totalCartPrice
-            }
+            },
+            
           }
         ]
       }).then(orderId => orderId)

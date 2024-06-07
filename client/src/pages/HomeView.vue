@@ -37,7 +37,7 @@
       </div>
       <div class="md:container mx-auto px-4">
         <h1 class="font-extrabold text-lg mb-4">Danh Mục Nổi Bật</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="overflow-hidden">
           <FeatureProduct />
         </div>
       </div>

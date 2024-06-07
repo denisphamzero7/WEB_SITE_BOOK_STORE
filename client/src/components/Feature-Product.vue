@@ -49,7 +49,7 @@ export default {
       if (this.windowWidth >= 1024) {
         return 'w-1/6'; // 6 products
       } else if (this.windowWidth >= 768) {
-        return 'w-1/4'; // 4 products
+        return 'w-1/2 md:w-1/3 lg:w-1/4'; // 2, 3, or 4 products
       } else {
         return 'w-full'; // 1 product
       }

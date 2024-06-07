@@ -2,8 +2,12 @@
   <div class="bg-blue-600">
     <div class="container mx-auto flex items-center text-white py-3 justify-between">
       <!-- Dropdown Section -->
+      <div class="md:hidden">
+       <router-link :to="{name:'Home-Page'}">
+        <img src="../assets/logo.png" class="w-24" alt="Logo" />
+      </router-link><!-- Hiển thị logo trên di động -->
+       </div>
       <div class="relative md:hidden flex items-center gap-2 cursor-pointer font-semibold" @click="toggleDropdown">
-        <img src="../assets/logo.png" class="w-12 h-12 md:hidden rounded-full shadow-md" alt="Logo" /> <!-- Hiển thị logo trên di động -->
         <h1 class="hidden md:block">Danh mục sản phẩm</h1>
         <!-- Dropdown Menu -->
         <div v-if="dropdownOpen" class="absolute top-10 left-0 bg-white text-black rounded-lg shadow-lg z-10 w-48 mt-2">
@@ -69,7 +73,9 @@
     </button>
     <!-- Logo -->
     <div class="flex justify-center my-4">
-      <img src="../assets/logo.png" class="w-24" alt="Logo" />
+      <router-link :to="{name:'Home-Page'}">
+        <img src="../assets/logo.png" class="w-24" alt="Logo" />
+      </router-link>
     </div>
     <!-- Search Input -->
     <div class="flex justify-center my-4">
