@@ -8,7 +8,7 @@
       </select>
     </div>
 
-    <div class="bg-blue-300 w-full min-h-screen gap-5  flex-wrap flex justify-center items-center overflow-hidden">
+    <div class="bg-blue-300 w-full min-h-screen gap-5  flex-wrap flex justify-center items-center overflow-hidden md:px-10">
       <Product class="mt-2" v-for="product in sortedProducts" :key="product._id" :product="product" />
     </div>
   </div>

@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="p-2 flex flex-col items-center">
-      <h2 class="font-bold text-lg mb-2 line-clamp-2 group-hover:line-clamp-none">{{ product.name }}</h2>
+      <h2 class="font-bold text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:line-clamp-none">{{ shortname(product.name) }}</h2>
       <h3>Author : {{ product.author?.name }}</h3>
       <div class="flex items-center gap-2">
         <span class="font-bold text-sm p-2 bg-yellow-300 rounded-s-2xl text-gray-600">sale 10%</span>
@@ -97,6 +97,11 @@ export default {
     },
     clearToast() {
       this.Toast.message = '';
+    },
+    shortname(name) {
+      const maxLength = 20; // Số ký tự tối đa
+      if (name.length <= maxLength) return name;
+      return name.substring(0, maxLength) + '...';
     },
     async handleWishlistUpdate() {
       try {
