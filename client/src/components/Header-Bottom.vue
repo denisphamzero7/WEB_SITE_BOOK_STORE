@@ -1,15 +1,16 @@
 <template>
   <div class="bg-blue-600">
     <div class="container mx-auto flex items-center text-white py-3 justify-between">
-      <!-- Dropdown Section -->
+      <!-- Logo Section -->
       <div class="md:hidden">
         <router-link :to="{ name: 'Home-Page' }">
           <img src="../assets/logo.png" class="w-24" alt="Logo" />
         </router-link>
       </div>
-      <div class="relative flex items-center gap-2 cursor-pointer font-semibold" @click="toggleDropdown">
-        <li class="pi pi-align-justify flex  items-center"></li>
-        <h1 class="hidden md:block text-base md:text-lg lg:text-xl">Danh mục sản phẩm</h1>
+      <!-- Dropdown Section - Only for Desktop -->
+      <div class="relative flex items-center gap-2 cursor-pointer font-semibold  md:flex" @click="toggleDropdown">
+        <li class="pi pi-align-justify hidden md:block items-center"></li>
+        <h1 class="text-base md:text-lg lg:text-xl hidden md:block">Danh mục sản phẩm</h1>
         <!-- Dropdown Menu -->
         <div v-if="dropdownOpen" class="absolute top-10 left-0 bg-white text-black rounded-lg shadow-lg z-10 w-48 mt-2">
           <ul class="py-2">
@@ -28,8 +29,8 @@
       </div>
       <!-- Hotline Section -->
       <div class="hidden md:flex items-center gap-2">
-        <h1 class="font-semibold hidden md:block text-sm md:text-base lg:text-lg">Đường dây nóng</h1>
-        <span class="text-lg hidden md:block">0337335747</span>
+        <h1 class="font-semibold text-sm md:text-base lg:text-lg">Đường dây nóng</h1>
+        <span class="text-lg">0337335747</span>
       </div>
       <!-- Cart and Avatar Section -->
       <div class="md:hidden flex justify-end items-center gap-3 ml-auto pr-5">
@@ -77,20 +78,7 @@
           <div class="flex justify-center my-4">
             <input type="text" v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Tìm kiếm..." class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 text-black">
           </div>
-          <!-- Dropdown Section -->
-          <div class="relative flex items-center gap-2 cursor-pointer font-semibold mt-6 mb-3" @click="toggleMobileDropdown">
-            <i :class="mobileDropdownOpen ? 'pi pi-angle-up' : 'pi pi-angle-down'"></i>
-            <h1>Danh mục sản phẩm</h1>
-            <!-- Mobile Dropdown Menu -->
-            <div v-if="mobileDropdownOpen" class="absolute top-12 left-0 bg-white text-black rounded-lg shadow-lg z-10 w-full mt-2">
-              <ul class="py-2">
-                <li v-for="category in allCategory" :key="category._id" class="px-4 py-2 hover:bg-gray-200 cursor-pointer" @click="selectCategory(category._id)">
-                  {{ category.title }}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <!-- Navigation Links -->
+          <!-- Mobile Navigation Links -->
           <div class="flex flex-col gap-3 font-semibold">
             <router-link class="hover:text-gray-200 text-sm md:text-base lg:text-lg" :to="{ name: 'Home-Page' }">Trang chủ</router-link>
             <router-link class="hover:text-gray-200 text-sm md:text-base lg:text-lg" :to="{ name: 'products-Page' }">Sản phẩm</router-link>
