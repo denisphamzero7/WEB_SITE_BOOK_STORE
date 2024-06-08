@@ -1,10 +1,10 @@
 <template>
   <Teleport to="body">
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-auto">
-      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-lg sm:max-w-3xl mx-4 sm:mx-6 md:mx-8 lg:mx-10 relative">
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-lg sm:max-w-3xl mx-4 sm:mx-6 md:mx-8 lg:mx-10 relative ">
         <button
           @click.prevent="closeProductModal"
-          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl sm:text-3xl"
+          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl sm:text-3xl mb-3"
         >
           <i class="pi pi-times-circle"></i>
         </button>

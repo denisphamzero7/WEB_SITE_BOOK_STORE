@@ -6,8 +6,8 @@
     >
       <i class="pi pi-arrow-circle-left text-xl"></i>
     </button>
-    <div class="flex overflow-hidden">
-      <transition-group v-bind="groupAttrs" class="flex w-full">
+    <div class="flex overflow-hidden relative">
+      <transition-group v-bind="groupAttrs" class="flex w-full transition-transform duration-500 ease-in-out">
         <Product
           v-for="(product, index) in getVisibleProducts"
           :key="product._id"
@@ -25,6 +25,7 @@
     </button>
   </div>
 </template>
+
 
 <script>
 import Product from '../components/Product.vue'
@@ -60,7 +61,7 @@ export default {
       return {
         name: 'slide-fade',
         tag: 'div', // Ensure a single root element
-        class: 'flex w-full'
+        class: 'flex w-full transition-transform duration-500 ease-in-out'
       }
     }
   },
@@ -113,7 +114,6 @@ export default {
   }
 }
 </script>
-
 <style>
 /* Tailwind CSS classes are used instead of scoped styles */
 .slide-fade-enter-active, .slide-fade-leave-active {
