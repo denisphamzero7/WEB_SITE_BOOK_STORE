@@ -9,7 +9,12 @@
     <!-- User Table -->
     <div class="bg-[#0f172ab3] p-4 rounded-lg shadow-lg overflow-x-auto">
       <div class="mb-4 flex justify-end">
-        <input type="text" v-model="searchQuery" placeholder="Search by name..." class="p-2 w-80 bg-gray-800 text-white rounded">
+        <input 
+          type="text" 
+          v-model="searchQuery" 
+          placeholder="Search by name..." 
+          class="p-2 w-full sm:w-80 bg-gray-800 text-white rounded"
+        />
       </div>
       <table class="min-w-full text-white border-collapse">
         <thead>
@@ -28,14 +33,14 @@
         </thead>
         <tbody>
           <tr
-            v-for="user in filteredUsers"
+            v-for="user in paginatedUsers"
             :key="user._id"
             class="odd:bg-gray-700 even:bg-gray-800 hover:bg-gray-600"
           >
             <td class="border border-gray-600 py-2 px-4">{{ user.firstname }}</td>
             <td class="border border-gray-600 py-2 px-4">{{ user.lastname }}</td>
             <td class="border border-gray-600 py-2 px-4 overflow-hidden">
-              <img :src="user.avatar?user.avatar:defaultAvatar" class="object-contain w-14 h-14 rounded-xl" alt="" />
+              <img :src="user.avatar ? user.avatar : defaultAvatar" class="object-contain w-14 h-14 rounded-xl" alt="" />
             </td>
             <td class="border border-gray-600 py-2 px-4">{{ user.role }}</td>
             <td class="border border-gray-600 py-2 px-4">{{ user.email }}</td>
@@ -62,13 +67,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { format } from 'date-fns'
-import Pagination from '../../components/Pagination.vue'
-import defaultAvatar from '../../assets/avatardefault.jpg'
+import { mapActions, mapGetters } from 'vuex';
+import { format } from 'date-fns';
+import Pagination from '../../components/Pagination.vue';
+import defaultAvatar from '../../assets/avatardefault.jpg';
+
 export default {
   components: {
-    Pagination
+    Pagination,
   },
   data() {
     return {
@@ -76,51 +82,51 @@ export default {
       itemsPerPage: 4,
       header: 'Users Manager',
       searchQuery: '',
-      defaultAvatar
-    }
+      defaultAvatar,
+    };
   },
   mounted() {
-    this.fetchAllUsers({ page: this.currentPage, limit: this.itemsPerPage })
+    this.fetchAllUsers({ page: this.currentPage, limit: this.itemsPerPage });
   },
   computed: {
     ...mapGetters('user', ['users']),
     filteredUsers() {
-      let filtered = this.users
+      let filtered = this.users;
       if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase()
-        filtered = filtered.filter(user => {
-          const fullName = `${user.firstname} ${user.lastname}`.toLowerCase()
-          return fullName.includes(query)
-        })
+        const query = this.searchQuery.toLowerCase();
+        filtered = filtered.filter((user) => {
+          const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
+          return fullName.includes(query);
+        });
       }
-      return filtered
+      return filtered;
     },
     paginatedUsers() {
-      const start = (this.currentPage - 1) * this.itemsPerPage
-      const end = start + this.itemsPerPage
-      return this.filteredUsers.slice(start, end)
-    }
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredUsers.slice(start, end);
+    },
   },
   methods: {
     ...mapActions('user', ['fetchAllUsers', 'deleteUser']),
     editUser(user) {
-      this.$router.push({ name: 'Edit-User', params: { id: user._id } })
+      this.$router.push({ name: 'Edit-User', params: { id: user._id } });
     },
     shortText(text, maxLength) {
       if (text) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
+        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
       } else {
-        return ''
+        return '';
       }
     },
     formatDate(date) {
-      return format(new Date(date), 'yyyy-MM-dd HH:mm:ss')
+      return format(new Date(date), 'yyyy-MM-dd HH:mm:ss');
     },
     handlePageChange(page) {
-      this.currentPage = page
-    }
-  }
-}
+      this.currentPage = page;
+    },
+  },
+};
 </script>
 
 <style scoped>
