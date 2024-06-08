@@ -4,16 +4,16 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <div class="container mx-auto flex flex-col my-6 gap-8 justify-center">
+      <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-8 justify-center">
         <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md">
           <img
-            class="w-full p-2 rounded-t-lg"
+            class="w-full lg:w-64 p-2 rounded-t-lg"
             :src="productDetail.images[0]"
             :alt="productDetail.name"
           />
         </div>
-        <div class="p-6">
-          <h1 class="text-3xl font-bold mb-4">{{ productDetail.name }}</h1>
+        <div class="p-6 flex-1">
+          <h1 class="text-3xl lg:text-4xl font-bold mb-4">{{ productDetail.name }}</h1>
           <div class="text-sm text-gray-600 mb-4">
             <span>Released: {{ formatDate(productDetail.createdAt) }}</span>
             <span class="mx-2">|</span>
@@ -25,9 +25,10 @@
             <a-rate :value="getstar" allowHalf />
             <span class="text-xl text-red-600 ml-3">{{ getstar }} đánh giá</span>
           </div>
-          <div class="text-xl font-medium mb-4">Price: {{ formatPrice }}</div>
+          <div class="text-xl lg:text-2xl font-medium mb-4">Price: {{ formatPrice }}</div>
           <div class="mb-4">
-            <span class="text-xl">Thể loại sách:</span> {{ formatBookCategories(productDetail.bookcategory) }}
+            <span class="text-xl">Thể loại sách:</span>
+            {{ formatBookCategories(productDetail.bookcategory) }}
           </div>
           <div class="text-lg mb-6">{{ productDetail.description }}</div>
           <div class="flex items-center mb-4">
@@ -37,25 +38,35 @@
               type="number"
               min="1"
               :max="productDetail.quantity"
-              class="w-16 px-2 py-1 border border-gray-400 rounded-md"
+              class="w-16 lg:w-20 px-2 py-1 border border-gray-400 rounded-md"
             />
             <div class="ml-4 flex gap-2">
               <button @click.prevent="incrementCount" class="btn btn-red">+</button>
               <button @click.prevent="decrementCount" class="btn btn-red">-</button>
             </div>
           </div>
-          <button @click.prevent="addToCart" class="btn btn-green w-full">Add to Cart</button>
+          <button @click.prevent="addToCart" class="btn btn-green lg:w-1/2">Add to Cart</button>
         </div>
       </div>
       <!-- Sản phẩm đề xuất -->
       <div class="container mx-auto mt-8">
-        <h1 class="text-xl font-bold mb-4">Sản phẩm được đề xuất</h1>
-        <div v-if="recommendedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <Product v-for="product in recommendedProducts" :key="product._id" :product="product" @click="selectProduct(product._id)" />
+        <h1 class="text-xl lg:text-2xl font-bold mb-4">Sản phẩm được đề xuất</h1>
+        <div v-if="recommendedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Product
+            v-for="product in recommendedProducts"
+            :key="product._id"
+            :product="product"
+            @click="selectProduct(product._id)"
+          />
         </div>
         <div v-else>
-          <div v-if="relatedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <Product v-for="product in relatedProducts" :key="product._id" :product="product" @click="selectProduct(product._id)" />
+          <div v-if="relatedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Product
+              v-for="product in relatedProducts"
+              :key="product._id"
+              :product="product"
+              @click="selectProduct(product._id)"
+            />
           </div>
           <div v-else class="text-red-600 text-lg">No related products found.</div>
         </div>
@@ -63,10 +74,58 @@
       <!-- Phần nhận xét và đánh giá -->
       <div class="container mx-auto mt-8">
         <!-- Nội dung nhận xét và đánh giá -->
+        <h1 class="text-xl lg:text-2xl font-bold mb-4">Comments and Ratings</h1>
+        <div v-if="productDetail.rating && productDetail.rating.length > 0" class="mb-6">
+          <div
+            v-for="comment in productDetail.rating"
+            :key="comment._id"
+            class="border-b border-gray-300 py-4 flex items-start space-x-4"
+          >
+            <div>
+              <img :src="comment.postedBy.avatar" alt="" class="rounded-full w-12 h-12" />
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">
+                    {{ comment.postedBy.firstname }} {{ comment.postedBy.lastname }}
+                  </p>
+                  <p class="text-sm text-gray-500">{{ formatDate(productDetail.createdAt) }}</p>
+                </div>
+                <div class="flex items-center">
+                  <a-rate :value="comment.start" disabled allowHalf />
+                </div>
+              </div>
+              <p class="text-lg text-gray-700 mt-2">{{ comment.comments }}</p>
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-red-600 text-lg">No comments yet.</div>
+        <div class="border-t border-gray-300 py-4">
+          <form @submit.prevent="voterating">
+            <h2 class="text-lg lg:text-xl font-medium mb-2">Add a Comment</h2>
+            <textarea
+              v-model="newComment"
+              rows="4"
+              class="w-full px-3 py-2 border border-gray-400 rounded-md mb-4"
+            ></textarea>
+            <div class="flex items-center mb-4">
+              <Rating :value="rating" :max-stars="5" @change="updateRating"></Rating>
+            </div>
+            <button type="submit" class="btn btn-green">Submit Comment</button>
+          </form>
+        </div>
       </div>
+      <Toast
+        :message="Toast.message"
+        :duration="2000"
+        :position="Toast.position"
+        :backgroundcolor="Toast.backgroundcolor"
+      />
     </div>
   </div>
 </template>
+
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Product from '../components/Product.vue'
@@ -94,7 +153,12 @@ export default {
     this.fetchProduct()
   },
   methods: {
-    ...mapActions('product', ['fetchProductDetail', 'postrating', 'fetchProduct','recommendProduct']),
+    ...mapActions('product', [
+      'fetchProductDetail',
+      'postrating',
+      'fetchProduct',
+      'recommendProduct'
+    ]),
     ...mapActions('user', ['addProductToCart']),
 
     selectProduct(productId) {
@@ -102,9 +166,9 @@ export default {
     },
     formatBookCategories(categories) {
       if (Array.isArray(categories)) {
-        return categories.join(", ");
+        return categories.join(', ')
       }
-      return 'N/A';
+      return 'N/A'
     },
     incrementCount() {
       if (this.countProducts < this.getProductDetail.quantity) {
@@ -140,19 +204,19 @@ export default {
           pid: this.productDetail._id,
           start: this.rating,
           comments: this.newComment
-        };
-        const response = await this.postrating(data);
+        }
+        const response = await this.postrating(data)
         if (response) {
-          await this.fetchProductDetail(this.$route.params.id);
-          alert("vote thành công")
-          this.rating = 0;
-          this.newComment = '';
+          await this.fetchProductDetail(this.$route.params.id)
+          alert('vote thành công')
+          this.rating = 0
+          this.newComment = ''
         } else {
-          console.log('bạn đăng nhập');
+          console.log('bạn đăng nhập')
           alert('bạn chưa đăng nhập')
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
     clearToast() {
@@ -172,7 +236,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('product', ['getProductDetail', 'getProducts','recommendedProducts']),
+    ...mapGetters('product', ['getProductDetail', 'getProducts', 'recommendedProducts']),
     relatedProducts() {
       const authorId = this.productDetail.author?._id
       return this.getProducts.filter(
@@ -212,7 +276,7 @@ export default {
 }
 </script>
 
-<style  scoped>
+<style scoped>
 .btn {
   @apply py-2 px-4 rounded-md shadow-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
