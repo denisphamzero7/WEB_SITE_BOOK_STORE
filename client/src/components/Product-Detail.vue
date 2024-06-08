@@ -4,17 +4,17 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-8 justify-center">
-        <div class="overflow-hidden w-full lg:w-1/2 rounded-lg border border-gray-300 shadow-md">
+      <div class="container mx-auto flex flex-col my-6 gap-8 justify-center">
+        <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md">
           <img
             class="w-full p-2 rounded-t-lg"
             :src="productDetail.images[0]"
             :alt="productDetail.name"
           />
         </div>
-        <div class="w-full lg:w-1/2 p-6">
+        <div class="p-6">
           <h1 class="text-3xl font-bold mb-4">{{ productDetail.name }}</h1>
-          <div class="flex items-center text-sm text-gray-600 mb-4">
+          <div class="text-sm text-gray-600 mb-4">
             <span>Released: {{ formatDate(productDetail.createdAt) }}</span>
             <span class="mx-2">|</span>
             <span>By: {{ author }}</span>
@@ -47,65 +47,26 @@
           <button @click.prevent="addToCart" class="btn btn-green w-full">Add to Cart</button>
         </div>
       </div>
+      <!-- Sản phẩm đề xuất -->
       <div class="container mx-auto mt-8">
         <h1 class="text-xl font-bold mb-4">Sản phẩm được đề xuất</h1>
-        <div v-if="recommendedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div v-if="recommendedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Product v-for="product in recommendedProducts" :key="product._id" :product="product" @click="selectProduct(product._id)" />
         </div>
         <div v-else>
-          <div v-if="relatedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <Product v-for="product in relatedProducts" :key="product._id" :product="product" @click="selectProduct(product._id)" />
-        </div>
-        <div v-else>
-            No related products found.
+          <div v-if="relatedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <Product v-for="product in relatedProducts" :key="product._id" :product="product" @click="selectProduct(product._id)" />
           </div>
+          <div v-else class="text-red-600 text-lg">No related products found.</div>
         </div>
-       
       </div>
-      <!-- Comments and Rating Section -->
+      <!-- Phần nhận xét và đánh giá -->
       <div class="container mx-auto mt-8">
-        <h1 class="text-xl font-bold mb-4">Comments and Ratings</h1>
-        <div v-if="productDetail.rating && productDetail.rating.length > 0" class="mb-6">
-          <div v-for="comment in productDetail.rating" :key="comment._id" class="border-b border-gray-300 py-4">
-            <div class="flex items-start mb-4 gap-2">
-              <img :src="comment.postedBy.avatar" alt="" class="rounded-full w-[50px] h-[50px]" />
-              <div>
-                <p class="text-sm font-semibold text-gray-800">{{ comment.postedBy.firstname }} {{ comment.postedBy.lastname }}</p>
-                <p class="text-sm text-gray-500">{{ formatDate(productDetail.createdAt) }}</p>
-              </div>
-            </div>
-            <p class="text-lg text-gray-700 mb-4">{{ comment.comments }}</p>
-            <div class="flex items-center">
-              <a-rate :value="comment.start" disabled allowHalf />
-            </div>
-          </div>
-        </div>
-        <div v-else class="text-red-600 text-lg">No comments yet.</div>
-        <div class="border-t border-gray-300 py-4">
-          <form @submit.prevent="voterating">
-            <h2 class="text-lg font-medium mb-2">Add a Comment</h2>
-            <textarea
-              v-model="newComment"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-400 rounded-md mb-4"
-            ></textarea>
-            <div class="flex items-center mb-4">
-              <Rating :value="rating" :max-stars="5" @change="updateRating"></Rating>
-            </div>
-            <button type="submit" class="btn btn-green">Submit Comment</button>
-          </form>
-        </div>
+        <!-- Nội dung nhận xét và đánh giá -->
       </div>
-      <Toast
-        :message="Toast.message"
-        :duration="2000"
-        :position="Toast.position"
-        :backgroundcolor="Toast.backgroundcolor"
-      />
     </div>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Product from '../components/Product.vue'
