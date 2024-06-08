@@ -54,7 +54,7 @@
               <span class="text-sm sm:text-lg text-red-600">Tình trạng: {{ selectedProduct.quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}</span>
             </div>
             <div class="flex justify-center mt-4">
-              <router-link :to="{ name: 'detail-product', params: { id: selectedProduct._id } }">
+              <router-link :to="{ name: 'detail-product', params: { id: selectedProduct._id } }" @click.native="handleCloseAndNavigate(selectedProduct._id)">
                 <h1 class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">Xem chi tiết</h1>
               </router-link>
             </div>
@@ -166,6 +166,10 @@ export default {
       }
       return 'N/A';
     },
+    handleCloseAndNavigate(productId) {
+    this.closeProductModal(); // Đóng modal
+    this.$router.push({ name: 'detail-product', params: { id: productId } }); // Chuyển hướng đến trang chi tiết sản phẩm
+  }
   }
 }
 </script>

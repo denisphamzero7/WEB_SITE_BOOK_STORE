@@ -6,14 +6,12 @@
     >
       <i class="pi pi-arrow-circle-left text-xl"></i>
     </button>
-    <div class="flex overflow-hidden relative">
-      <transition-group v-bind="groupAttrs" class="flex w-full transition-transform duration-500 ease-in-out">
+    <div class="flex overflow-hidden">
+      <transition-group class="flex w-full overflow-x-auto gap-3" name="slide">
         <Product
-          v-for="(product, index) in getVisibleProducts"
+          v-for="(product, index) in visibleProducts"
           :key="product._id"
           :product="product"
-          class="flex-shrink-0 transition-transform duration-500 ease-in-out"
-          :class="productClass"
         />
       </transition-group>
     </div>
@@ -26,7 +24,6 @@
   </div>
 </template>
 
-
 <script>
 import Product from '../components/Product.vue'
 import { mapActions, mapGetters } from 'vuex'
@@ -36,90 +33,53 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      visibleCards: 6,
-      timer: null,
+      visibleCards: {
+        mobile: 1,
+        tablet: 3,
+        desktop: 6
+      },
       windowWidth: window.innerWidth
     }
   },
   computed: {
     ...mapGetters('product', ['getFeaturedProducts']),
-    getVisibleProducts() {
-      return this.getFeaturedProducts.slice(this.currentIndex, this.currentIndex + this.visibleCards);
+    visibleProducts() {
+      return this.getFeaturedProducts.slice(
+        this.currentIndex,
+        this.currentIndex + this.visibleCards[this.deviceType]
+      );
     },
-    productClass() {
-      if (this.windowWidth >= 1024) {
-        return 'w-1/6'; // 6 products
-      } else if (this.windowWidth >= 768) {
-        return 'w-1/3'; // 3 products
-      } else if (this.windowWidth >= 640) {
-        return 'w-1/2'; // 2 products
-      } else {
-        return 'w-full'; // 1 product
-      }
-    },
-    groupAttrs() {
-      return {
-        name: 'slide-fade',
-        tag: 'div', // Ensure a single root element
-        class: 'flex w-full transition-transform duration-500 ease-in-out'
-      }
+    deviceType() {
+      if (this.windowWidth < 768) return 'mobile';
+      else if (this.windowWidth < 1024) return 'tablet';
+      else return 'desktop';
     }
   },
   mounted() {
     this.fetchFeaturedProducts();
-    this.startAutoSlide();
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize(); // Set initial visibleCards based on window width
+    window.addEventListener('resize', this.updateVisibleCards);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.updateVisibleCards);
   },
   methods: {
     ...mapActions('product', ['fetchFeaturedProducts']),
     next() {
-      if (this.currentIndex < this.getFeaturedProducts.length - this.visibleCards) {
-        this.currentIndex++;
-      } else {
-        this.currentIndex = 0; // Reset to the start if at the end
-      }
+      const maxIndex = this.getFeaturedProducts.length - this.visibleCards[this.deviceType];
+      this.currentIndex = (this.currentIndex + 1) % (maxIndex + 1);
     },
     prev() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      } else {
-        this.currentIndex = this.getFeaturedProducts.length - this.visibleCards; // Go to the last slide if at the start
-      }
+      const maxIndex = this.getFeaturedProducts.length - this.visibleCards[this.deviceType];
+      this.currentIndex = (this.currentIndex - 1 + maxIndex + 1) % (maxIndex + 1);
     },
-    startAutoSlide() {
-      this.timer = setInterval(() => {
-        this.next()
-      }, 5000)
-    },
-    stopAutoSlide() {
-      clearInterval(this.timer)
-    },
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-      if (this.windowWidth >= 1024) {
-        this.visibleCards = 6;
-      } else if (this.windowWidth >= 768) {
-        this.visibleCards = 3;
-      } else if (this.windowWidth >= 640) {
-        this.visibleCards = 2;
-      } else {
-        this.visibleCards = 1;
+    updateVisibleCards() {
+      if (!this.timer) {
+        this.timer = window.requestAnimationFrame(() => {
+          this.windowWidth = window.innerWidth;
+          this.timer = null;
+        });
       }
     }
-  },
-  beforeDestroy() {
-    this.stopAutoSlide();
-    window.removeEventListener('resize', this.handleResize);
   }
-}
+};
 </script>
-<style>
-/* Tailwind CSS classes are used instead of scoped styles */
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: transform 0.5s ease;
-}
-.slide-fade-enter, .slide-fade-leave-to {
-  transform: translateX(100%);
-}
-</style>
