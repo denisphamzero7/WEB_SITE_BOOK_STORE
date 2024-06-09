@@ -150,10 +150,9 @@ const actions = {
   async getUserById({commit},userId){
     try {
       const response = await userService.getuserbyid(userId)
-       const updateuser = response.user
-       console.log(updateuser);
-      commit('SET_USER',updateuser)
-      return updateuser
+       const getuser = response.user
+       console.log(getuser);
+      commit('SET_USER',getuser)
     } catch (error) {
       console.log(error);
     }

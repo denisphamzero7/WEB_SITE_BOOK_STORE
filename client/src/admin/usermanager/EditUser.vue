@@ -92,23 +92,25 @@ export default {
         position: '',
         backgroundcolor: ''
       },
-      success:false
+      success: false
     };
   },
   mounted() {
-    this.getUserById(this.$route.params.id);
+    const id = this.$route.params.id;
+    console.log('id user:', id);
+    this.getUserById(id);
   },
   computed: {
     ...mapGetters('user', ['edituser']),
     avatarUrl() {
-      return this.edituser.avatar? this.edituser.avatar : defaultAvatar;
+      return this.edituser.avatar ? this.edituser.avatar : defaultAvatar;
     }
   },
   methods: {
     clearToast() {
       this.Toast.message = '';
     },
-    ...mapActions('user', ['updateUserByAdmin']),
+    ...mapActions('user', ['updateUserByAdmin', 'getUserById']),
     handleAvatarChange(event) {
       this.avatarFile = event.target.files[0];
     },
@@ -126,21 +128,20 @@ export default {
       }
       const id = this.$route.params.id;
       try {
-        await this.updateUserByAdmin({ userId:id, data:formData });
+        await this.updateUserByAdmin({ userId: id, data: formData });
         this.success = true;
         this.Toast = {
           message: 'Update successful!',
           position: 'bottom-left',
           backgroundcolor: 'success',
         };
-       
       } catch (error) {
         this.Toast = {
-          message: `Update failed`,
+          message: 'Update failed',
           position: 'bottom-left',
           backgroundcolor: 'error',
         };
-      } 
+      }
     },
   },
 };

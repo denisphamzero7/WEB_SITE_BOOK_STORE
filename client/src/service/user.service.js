@@ -31,7 +31,7 @@ class UserService {
     }
     async getuserbyid (userId){
       try {
-          const response = await axios.get(`/user/${userId}`)
+          const response = await axios.get(`user/${userId}`)
           console.log(response);
           return response
       } catch (error) {
