@@ -472,6 +472,7 @@ const statistical = asynhandle(async (req, res) => {
   }
 });
 
+
 module.exports = {
   updatewishlist,
   removeproductinwishlist,

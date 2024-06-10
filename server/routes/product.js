@@ -8,7 +8,6 @@ router.post('/',[verifyAccessToken, isAdmin ],uploader.array('images',5),control
 router.get('/', controller.allProducts);
 router.put('/ratings', verifyAccessToken, controller.ratings);
 router.get('/:pid', controller.getAnProduct);
-
 router.delete('/:pid', [verifyAccessToken,], controller.deleteAnProduct);
 router.delete('/', [verifyAccessToken, isAdmin], controller.deleteAllProduct);
 router.put('/:pid', [verifyAccessToken, isAdmin], uploader.array('images',5), controller.updateAnProduct);

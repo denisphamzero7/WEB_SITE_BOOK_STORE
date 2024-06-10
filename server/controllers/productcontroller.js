@@ -294,7 +294,9 @@ const recommendProduct = asyncHandler(async (req, res) => {
     console.log(error);
     res.status(500).json({ success: false });
   }
-})
+});
+
+
 
 
 
@@ -307,5 +309,6 @@ module.exports = {
   deleteAllProduct,
   uploadImage,
   ratings,
-  recommendProduct
+  recommendProduct,
+
 };

@@ -10,7 +10,7 @@ from CB import *
 start_time = time.time()
 app = Flask(__name__)
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient("mongodb+srv://haudaipro:haudaipro123@booksdb.4ope72n.mongodb.net/bookapp")
 mydb = myclient["bookapp"]
 mycol = mydb["products"]
 myCustomers = mydb["users"]
