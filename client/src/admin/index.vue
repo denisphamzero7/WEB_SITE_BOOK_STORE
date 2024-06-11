@@ -30,6 +30,9 @@
         <li class="pi pi-shopping-bag text-red-500 text-3xl"></li>
       </div>
     </div>
+    <div class="w-full ">
+     
+      <RevenueChart /></div>
     <div>
       <h1 class="flex items-center font-medium text-3xl text-white mt-6">
         <li class="rounded-full bg-[#0f172ab3] p-3 text-xl pi pi-chart-line mr-3"></li>
@@ -45,10 +48,10 @@
 <script>
 import Chart from 'primevue/chart'; // Ensure this import is correct
 import { mapActions, mapGetters } from 'vuex';
-
+import RevenueChart from './RevenueChart.vue';
 export default {
   components: {
-    Chart // Register the Chart component here
+    Chart ,RevenueChart  //Register the Chart component here
   },
   data() {
     return {

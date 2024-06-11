@@ -7,7 +7,7 @@
       <i class="pi pi-arrow-circle-left text-xl"></i>
     </button>
     <div class="flex overflow-hidden">
-      <transition-group class="flex w-full overflow-x-auto gap-3" name="slide">
+      <transition-group v-bind="$attrs" class="flex w-full overflow-x-auto gap-3" name="slide">
         <Product
           v-for="(product, index) in visibleProducts"
           :key="product._id"
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import Product from '../components/Product.vue'
-import { mapActions, mapGetters } from 'vuex'
+import Product from '../components/Product.vue';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: { Product },
@@ -36,10 +36,10 @@ export default {
       visibleCards: {
         mobile: 1,
         tablet: 3,
-        desktop: 6
+        desktop: 6,
       },
-      windowWidth: window.innerWidth
-    }
+      windowWidth: window.innerWidth,
+    };
   },
   computed: {
     ...mapGetters('product', ['getFeaturedProducts']),
@@ -53,13 +53,13 @@ export default {
       if (this.windowWidth < 768) return 'mobile';
       else if (this.windowWidth < 1024) return 'tablet';
       else return 'desktop';
-    }
+    },
   },
   mounted() {
     this.fetchFeaturedProducts();
     window.addEventListener('resize', this.updateVisibleCards);
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener('resize', this.updateVisibleCards);
   },
   methods: {
@@ -79,7 +79,15 @@ export default {
           this.timer = null;
         });
       }
-    }
-  }
+    },
+  },
+  inheritAttrs: false, // Disable automatic inheritance
 };
 </script>
+
+<style scoped>
+#revenueChart {
+  max-width: 600px;
+  margin: auto;
+}
+</style>
