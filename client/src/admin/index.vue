@@ -30,106 +30,106 @@
         <li class="pi pi-shopping-bag text-red-500 text-3xl"></li>
       </div>
     </div>
-    <div class="w-full ">
-     
-      <RevenueChart /></div>
-    <div>
-      <h1 class="flex items-center font-medium text-3xl text-white mt-6">
+    <div class="w-full mt-6">
+      <h1 class="flex items-center font-medium text-3xl text-white">
         <li class="rounded-full bg-[#0f172ab3] p-3 text-xl pi pi-chart-line mr-3"></li>
         {{ header1 }}
       </h1>
       <div class="card mt-4 bg-[#0f172ab3] p-4 rounded-lg shadow-lg">
-        <Chart type="line" :data="chartData" :options="chartOptions" class="h-96" />
+        <Chart type="line" :data="chartData" :options="chartOptions" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Chart from 'primevue/chart'; // Ensure this import is correct
+import Chart from 'primevue/chart';
 import { mapActions, mapGetters } from 'vuex';
 import RevenueChart from './RevenueChart.vue';
+
 export default {
   components: {
-    Chart ,RevenueChart  //Register the Chart component here
+    Chart,
+    RevenueChart
   },
   data() {
     return {
       header: 'Overview',
-      header1: 'Trends Overview',
+      header1: 'Total Products Sold',
       chartData: null,
       chartOptions: null
     };
   },
   computed: {
-    ...mapGetters('user', ['statistical'])
+    ...mapGetters('user', ['statistical']),
+    ...mapGetters('order', ['Order'])
   },
   mounted() {
-    this.chartData = this.setChartData();
-    this.chartOptions = this.setChartOptions();
     this.fetchstatistical();
+    this.fetchOrdersByadmin();
   },
   methods: {
     ...mapActions('user', ['fetchstatistical']),
-    setChartData() {
-      const documentStyle = getComputedStyle(document.documentElement);
+    ...mapActions('order', ['fetchOrdersByadmin']),
+    prepareChartData() {
+      const months = Array(12).fill(0);
+      this.Order.forEach(order => {
+        const month = new Date(order.createdAt).getMonth();
+        order.products.forEach(product => {
+          months[month] += product.quantity;
+        });
+      });
+      
+     
 
-      return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      this.chartData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
           {
-            label: 'First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
+            label: 'Total Products Sold',
+            data: months,
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--cyan-500'),
-            tension: 0.4
-          },
-          {
-            label: 'Second Dataset',
-            data: [28, 48, 40, 19, 86, 27, 90],
-            fill: false,
-            borderColor: documentStyle.getPropertyValue('--gray-500'),
+            borderColor: '#42A5F5',
             tension: 0.4
           }
-        ]
+        ],
+       
       };
-    },
-    setChartOptions() {
-      const documentStyle = getComputedStyle(document.documentElement);
-      const textColor = documentStyle.getPropertyValue('--text-color');
-      const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-      const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-      return {
-        maintainAspectRatio: false,
-        aspectRatio: 0.6,
+      this.chartOptions = {
+        responsive: true,
         plugins: {
           legend: {
-            labels: {
-              color: textColor
-            }
+            display: true
           }
         },
         scales: {
           x: {
-            ticks: {
-              color: textColorSecondary
-            },
-            grid: {
-              color: surfaceBorder
+            display: true,
+            title: {
+              display: true,
+              text: 'Months'
             }
           },
           y: {
-            ticks: {
-              color: textColorSecondary
+            display: true,
+            title: {
+              display: true,
+              text: 'Total Products Sold'
             },
-            grid: {
-              color: surfaceBorder
-            }
+            min: 0
           }
         }
       };
     }
+  },
+  watch: {
+    Order: 'prepareChartData'
   }
 };
 </script>
+
+<style>
+/* Add your custom styles here */
+
+</style>
