@@ -15,7 +15,7 @@
           <h1 class="font-semibold text-lg m-0">Danh mục sản phẩm</h1>
         </div>
         <!-- Dropdown Menu -->
-        <div v-if="dropdownOpen" class="absolute top-12 left-0 bg-white text-black rounded-lg shadow-lg z-10 w-48 mt-2">
+        <div v-if="dropdownOpen" class="absolute top-12 left-0 bg-white text-black rounded-lg shadow-lg z-10 w-100 mt-2">
           <ul class="py-2">
             <li v-for="category in allCategory" :key="category._id" class="px-4 py-2 hover:bg-gray-200 cursor-pointer flex items-center gap-2" @click="selectCategory(category._id)">
               <i class="pi pi-tag"></i>

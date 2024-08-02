@@ -36,7 +36,7 @@
         </ul>
       </div>
       <div class="md:container mx-auto px-4">
-        <h1 class="font-extrabold text-lg mb-4">Danh Mục Nổi Bật</h1>
+        <h1 class="font-extrabold text-lg mb-4">Sản phẩm Nổi Bật</h1>
         <div class="overflow-hidden">
           <FeatureProduct />
         </div>

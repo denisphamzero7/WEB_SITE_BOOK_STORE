@@ -1,41 +1,20 @@
 <template>
   <Teleport to="body">
-    <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-auto">
-      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-lg sm:max-w-3xl mx-4 sm:mx-6 md:mx-8 lg:mx-10 relative ">
-        <button
-          @click.prevent="closeProductModal"
-          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl sm:text-3xl mb-3"
-        >
-          <i class="pi pi-times-circle"></i>
-        </button>
-        <div v-if="selectedProduct" class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+    <div 
+      v-if="isModalOpen" 
+      @click.prevent="closeProductModal" 
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50 overflow-auto"
+    >
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-lg sm:max-w-3xl mx-4 sm:mx-6 md:mx-8 lg:mx-10 relative">
+        <div v-if="selectedProduct" class="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:overflow-scroll">
           <div class="flex flex-col sm:w-1/2">
             <img :src="selectedProduct.images" alt="Product Image" class="w-full h-auto rounded-lg shadow-md" />
             <div class="flex items-center justify-center mt-4">
-              <button
-                @click.prevent="decrementCount"
-                class="border border-gray-300 p-2 rounded-l-lg hover:bg-gray-100"
-              >
-                -
-              </button>
-              <input
-                type="number"
-                v-model="countproducts"
-                class="border-t border-b border-gray-300 p-2 text-center w-12 sm:w-16"
-              />
-              <button
-                @click.prevent="incrementCount"
-                class="border border-gray-300 p-2 rounded-r-lg hover:bg-gray-100"
-              >
-                +
-              </button>
+              <button @click.prevent="decrementCount" class="border border-gray-300 p-2 rounded-l-lg hover:bg-gray-100">-</button>
+              <input type="number" v-model="countproducts" class="border-t border-b border-gray-300 p-2 text-center w-12 sm:w-16" />
+              <button @click.prevent="incrementCount" class="border border-gray-300 p-2 rounded-r-lg hover:bg-gray-100">+</button>
             </div>
-            <button
-              @click.prevent="addToCart"
-              class="bg-red-600 text-white py-2 mt-4 rounded-md hover:bg-red-700 transition duration-300"
-            >
-              Thêm vào giỏ hàng
-            </button>
+            <button @click.prevent="addToCart" class="bg-red-600 text-white py-2 mt-4 rounded-md hover:bg-red-700 transition duration-300">Thêm vào giỏ hàng</button>
           </div>
           <div class="flex flex-col sm:w-1/2">
             <h1 class="text-xl sm:text-2xl font-semibold">{{ selectedProduct.name }}</h1>
@@ -167,22 +146,16 @@ export default {
       return 'N/A';
     },
     handleCloseAndNavigate(productId) {
-    this.closeProductModal(); // Đóng modal
-    this.$router.push({ name: 'detail-product', params: { id: productId } }); // Chuyển hướng đến trang chi tiết sản phẩm
-  }
+      this.closeProductModal(); // Đóng modal
+      this.$router.push({ name: 'detail-product', params: { id: productId } }); // Chuyển hướng đến trang chi tiết sản phẩm
+    }
   }
 }
 </script>
 
 <style scoped>
-button {
-  outline: none;
-}
-
-.line-clamp-2 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+/* Ensure the background overlay is transparent */
+div.fixed.inset-0 {
+  background-color: rgba(0, 0, 0, 0.7); /* 70% opacity */
 }
 </style>

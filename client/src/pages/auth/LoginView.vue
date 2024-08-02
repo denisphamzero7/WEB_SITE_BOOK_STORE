@@ -21,8 +21,8 @@
 
         <div class="flex align-items-center justify-content-between mb-6">
           <div class="flex align-items-center">
-      
-            <label for="rememberme1">Remember me</label>
+            <input type="checkbox" v-model="checked" id="checkbox" />
+            <label for="rememberme1" class="ml-2">Remember me</label>
           </div>
           <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
             >Forgot password?</a
@@ -43,21 +43,19 @@
 </template>
 
 <script>
-
 import { mapActions } from 'vuex'
 import Toast from '../../components/Toast.vue'
 import router from '../../router/index'
 
 export default {
   components: {
-  
     Toast
   },
   data() {
     return {
       payload: {
-        password: '1234',
-        email: 'quanki@gmail.com'
+        password: '',
+        email: ''
       },
       Toast: {
         message: '',
@@ -67,22 +65,34 @@ export default {
       checked: false
     }
   },
-
+  mounted() {
+    const storedEmail = localStorage.getItem('email')
+    const storedPassword = localStorage.getItem('password')
+    if (storedEmail && storedPassword) {
+      this.payload.email = storedEmail
+      this.payload.password = storedPassword
+      this.checked = true
+    }
+  },
   methods: {
     ...mapActions('user', ['login', 'fetchcurrentuser']),
-
     async success() {
       try {
         const response = await this.login(this.payload)
-        console.log(response)
         if (response) {
+          if (this.checked) {
+            localStorage.setItem('email', this.payload.email)
+            localStorage.setItem('password', this.payload.password)
+          } else {
+            localStorage.removeItem('email')
+            localStorage.removeItem('password')
+          }
           await this.fetchcurrentuser()
           this.Toast = {
             message: 'Login successful!',
             position: 'bottom-right',
             backgroundcolor: 'success'
           }
-          console.log(this.Toast);
           setTimeout(() => {
             router.push({ name: 'Home-Page' })
           }, 2000)
@@ -94,7 +104,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log('Error response from server:', error)
         this.Toast = {
           message: 'Login error!',
           position: 'top-right',
@@ -102,7 +111,6 @@ export default {
         }
       }
     },
-
     clearToast() {
       this.Toast.message = ''
     }

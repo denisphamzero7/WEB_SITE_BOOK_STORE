@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 bg-gray-700 text-white min-h-screen roboto-regular">
+  <div class="p-6 bg-gray-700 text-white min-h-screen ">
     <h1 class="text-3xl font-bold mb-4 p-2 rounded-lg">Order Details</h1>
     <div class="mb-8 bg-gray-800 p-4 rounded-lg">
       <p class="mb-2"><strong>Order ID:</strong> {{ order._id }}</p>
@@ -130,8 +130,5 @@ export default {
 </script>
 
 <style scoped>
-.roboto-regular {
-  font-family: 'Noto Sans ExtraCondensed', sans-serif;
- 
-}
+
 </style>

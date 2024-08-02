@@ -7,7 +7,7 @@
     >
       Previous
     </button>
-    <span class="text-white">Page {{ currentPage }} of {{ totalPages }}</span>
+    <span class="text-gray-500">Page {{ currentPage }} of {{ totalPages }}</span>
     <button 
       @click="goToPage(currentPage + 1)" 
       :disabled="currentPage === totalPages"

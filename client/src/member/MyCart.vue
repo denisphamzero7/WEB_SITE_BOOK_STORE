@@ -13,7 +13,7 @@
         <img
           :src="getImageSrc(cartItem.product?.images)"
           alt="Product Image"
-          class="w-full sm:w-32 h-32 object-cover rounded-md mb-4 sm:mb-0"
+          class="w-32 sm:w-32 h-32 object-cover rounded-md mb-4 sm:mb-0"
         />
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full sm:pl-4">
           <div class="flex flex-col w-full">
@@ -49,7 +49,7 @@
         <h2 class="text-2xl font-semibold">Thông tin thanh toán</h2>
       </header>
       <div class="flex flex-col space-y-4">
-        <span class="text-gray-800 text-lg">Tổng giá tiền: <span class="font-semibold">{{ totalCartPrice }} VND</span></span>
+        <span class="text-gray-800 text-lg">Tổng giá tiền: <span class="font-semibold">{{ totalCartPrice }} $</span></span>
         <router-link :to="{ name: 'check-out' }">
           <div
             class="flex justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"

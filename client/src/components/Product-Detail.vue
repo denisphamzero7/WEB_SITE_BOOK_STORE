@@ -4,16 +4,16 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-8 justify-center">
+      <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-4 justify-center">
         <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md">
           <img
-            class="w-full lg:w-64 p-2 rounded-t-lg"
+            class="w-64 p-2 rounded-t-lg"
             :src="productDetail.images[0]"
             :alt="productDetail.name"
           />
         </div>
-        <div class="p-6 flex-1">
-          <h1 class="text-3xl lg:text-4xl font-bold mb-4">{{ productDetail.name }}</h1>
+        <div class="p-2 flex-1">
+          <h1 class="text-2xl font-bold mb-4">{{ productDetail.name }}</h1>
           <div class="text-sm text-gray-600 mb-4">
             <span>Released: {{ formatDate(productDetail.createdAt) }}</span>
             <span class="mx-2">|</span>
@@ -108,6 +108,7 @@
               v-model="newComment"
               rows="4"
               class="w-full px-3 py-2 border border-gray-400 rounded-md mb-4"
+              placeholder="Your comments here..."
             ></textarea>
             <div class="flex items-center mb-4">
               <Rating :value="rating" :max-stars="5" @change="updateRating"></Rating>

@@ -5,6 +5,9 @@
     </header>
     <div class="py-3 flex  flex-wrap gap-2">
       <Product v-for="product in wishlist" :key="product._id" :product="product" />
+      <div v-if="!wishlist">
+                <h1>not found</h1>
+      </div>
     </div>
   </div>
 </template>

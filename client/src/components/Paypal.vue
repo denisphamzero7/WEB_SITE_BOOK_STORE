@@ -30,8 +30,9 @@ export default {
   },
 
   mounted() {
-    this.loadPayPalScript()
- 
+    this.loadPayPalScript(),
+    this.fetchcart();
+
   },
 
   computed: {
