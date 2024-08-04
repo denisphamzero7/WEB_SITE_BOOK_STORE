@@ -10,6 +10,9 @@
       <router-link v-for="(link, index) in links" :key="index" :to="link.to" class="flex items-center py-2 px-4 hover:bg-purple-800 cursor-pointer">
         <i :class="link.icon" class="text-xl mr-2"></i> {{ link.text }}
       </router-link>
+      <li class="flex items-center py-2 px-4 hover:bg-purple-800 cursor-pointer" @click="handlelogout">
+        <i class="pi pi-sign-out text-xl mr-2"></i> Logout
+      </li>
     </ul>
   </div>
 </template>
@@ -35,7 +38,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions('user', ['fetchcurrentuser']),
+    ...mapActions('user', ['fetchcurrentuser', 'logout']),
+    async handlelogout() {
+      await this.logout();
+      this.$router.push({ name: 'Login-Page' }); // Redirect to login page or home page after logout
+    },
   },
   data() {
     return {

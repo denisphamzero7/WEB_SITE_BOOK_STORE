@@ -1,4 +1,5 @@
 /* eslint-disable no-debugger */
+import ResetPassword from '@/pages/auth/ResetPassword.vue';
 import Authservice from '../../service/auth'
 import userService from '../../service/user.service';
 const state ={
@@ -122,6 +123,18 @@ const actions = {
    throw new Error(errorMessage);
  }
   },
+  async ResetPassword({commit},{token,password}){
+    try {
+     const response = await userService.resetpassword(token,password)
+     const resetpassword = response.mess
+     return resetpassword
+    } catch (error) {
+      // Handle error and provide more information
+      const errorMessage = error.response?.data?.message || 'An error occurred';
+      console.error('Forgot password error:', errorMessage);
+      throw new Error(errorMessage);
+    }
+     },
   async fetchAllUsers({commit},payload){
     try {
       const response = await userService.getalluser(payload)

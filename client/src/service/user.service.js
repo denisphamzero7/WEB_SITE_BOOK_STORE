@@ -21,6 +21,15 @@ class UserService {
       throw error;
     }
   }
+  async resetpassword(token,password) {
+    try {
+      const response = await axios.put('user/resetpassword', {token, password });
+      return response;
+    } catch (error) {
+      console.error('Error:', error.response?.data?.message || error.message);
+      throw error;
+    }
+  }
     async statistical(data){
       try {
           const response = await axios.get('user/statistical', data)

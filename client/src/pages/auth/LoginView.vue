@@ -1,4 +1,3 @@
-// YourComponent.vue
 <template>
   <div class="flex justify-center bg-slate-300">
     <div class="surface-card p-4 shadow-2 border-round w-full max-w-[500px] my-[100px] lg:w-6">
@@ -8,28 +7,26 @@
         <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
       </div>
 
-      <form @submit.prevent="success">
+      <form @submit.prevent="handleLogin">
         <label for="email" class="block text-900 font-medium mb-2">Email</label>
         <input v-model="payload.email" id="email" type="text" class="w-full mb-3 border-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-md p-2" />
+        <span v-if="emailError" class="text-red-500 text-sm">{{ emailError }}</span>
 
-        <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-        <input
-          v-model="payload.password"
-          id="password"
-          type="password"
-          class="w-full mb-3 border-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-md p-2"
-        />
+        <label for="password" class="block text-900 font-medium mb-2">Password</label>
+        <input v-model="payload.password" id="password" type="password" class="w-full mb-3 border-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 rounded-md p-2" />
+        <span v-if="passwordError" class="text-red-500 text-sm">{{ passwordError }}</span>
 
-        <div class="flex align-items-center justify-content-between mb-6">
-          <div class="flex align-items-center">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center">
             <input type="checkbox" v-model="checked" id="checkbox" />
-            <label for="rememberme1" class="ml-2">Remember me</label>
+            <label for="checkbox" class="ml-2">Remember me</label>
           </div>
-          <a @click="triggerforgotPassword" class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
+          <a @click="handleForgotPassword" class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Forgot password?</a>
         </div>
 
-        <button type="submit" label="Sign In" class="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600">Login</button>
+        <button type="submit" class="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600">Login</button>
       </form>
+      
       <Toast
         :message="Toast.message"
         :duration="3000"
@@ -53,15 +50,17 @@ export default {
   data() {
     return {
       payload: {
-        password: '',
-        email: ''
+        email: '',
+        password: ''
       },
       Toast: {
         message: '',
         position: '',
         backgroundcolor: ''
       },
-      checked: false
+      checked: false,
+      emailError: '',
+      passwordError: ''
     };
   },
   mounted() {
@@ -75,8 +74,32 @@ export default {
   },
   methods: {
     ...mapActions('user', ['login', 'fetchcurrentuser', 'forgotPassword']),
-   
-    async success() {
+
+    validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    },
+
+    validateForm() {
+      this.emailError = '';
+      this.passwordError = '';
+
+      if (!this.payload.email) {
+        this.emailError = 'Email is required.';
+      } else if (!this.validateEmail(this.payload.email)) {
+        this.emailError = 'Invalid email format.';
+      }
+
+      if (!this.payload.password) {
+        this.passwordError = 'Password is required.';
+      }
+
+      return !this.emailError && !this.passwordError;
+    },
+
+    async handleLogin() {
+      if (!this.validateForm()) return;
+
       try {
         const response = await this.login(this.payload);
         if (response) {
@@ -88,54 +111,47 @@ export default {
             localStorage.removeItem('password');
           }
           await this.fetchcurrentuser();
-          this.Toast = {
-            message: 'Login successful!',
-            position: 'bottom-right',
-            backgroundcolor: 'success'
-          };
+          this.showToast('Login successful!', 'bottom-right', 'success');
           setTimeout(() => {
             router.push({ name: 'Home-Page' });
           }, 2000);
         } else {
-          this.Toast = {
-            message: 'Login failed',
-            position: 'bottom-right',
-            backgroundcolor: 'error'
-          };
+          this.showToast('Login failed', 'bottom-right', 'error');
         }
       } catch (error) {
-        this.Toast = {
-          message: 'Login error!',
-          position: 'top-right',
-          backgroundcolor: 'error'
-        };
+        this.showToast('Login error!', 'top-right', 'error');
       }
     },
-    async triggerforgotPassword() {
+
+    async handleForgotPassword() {
+      this.emailError = '';
+
+      if (!this.payload.email) {
+        this.emailError = 'Email is required to reset password.';
+        return;
+      }
+
+      if (!this.validateEmail(this.payload.email)) {
+        this.emailError = 'Invalid email format.';
+        return;
+      }
+
       try {
         const response = await this.forgotPassword(this.payload.email);
         if (response) {
-          this.Toast = {
-            message: 'Password reset email sent!',
-            position: 'bottom-right',
-            backgroundcolor: 'success'
-          };
-          console.log(response);
+          this.showToast('Password reset email sent!', 'bottom-right', 'success');
         } else {
-          this.Toast = {
-            message: 'Failed to send password reset email',
-            position: 'bottom-right',
-            backgroundcolor: 'error'
-          };
+          this.showToast('Failed to send password reset email', 'bottom-right', 'error');
         }
       } catch (error) {
-        this.Toast = {
-          message: 'Error sending password reset email',
-          position: 'top-right',
-          backgroundcolor: 'error'
-        };
+        this.showToast('Error sending password reset email', 'top-right', 'error');
       }
     },
+
+    showToast(message, position, backgroundcolor) {
+      this.Toast = { message, position, backgroundcolor };
+    },
+
     clearToast() {
       this.Toast.message = '';
     }

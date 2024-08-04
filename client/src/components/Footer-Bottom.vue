@@ -8,15 +8,15 @@
       <div class="mb-3">
         <h1 class="text-2xl font-bold mb-2 text-gray-400">Liên hệ</h1>
         <div class="text-left">
-          <div class="mb-2 flex gap-1">
-            <span class="font-semibold whitespace-nowrap">Địa chỉ:</span>
-            <p class="text-[#4f5d77] whitespace-nowrap">Hoà Quý - Ngũ Hành Sơn - Đà Nẵng</p>
+          <div class="mb-2 gap-1 grid grid-flow-row m-0">
+            <span class="font-semibold whitespace-nowrap grid-cols-1">Địa chỉ:</span>
+            <p class="text-[#4f5d77] whitespace-nowrap grid-cols-1">Hoà Quý - Ngũ Hành Sơn - Đà Nẵng</p>
           </div>
-          <div class="mb-2 flex gap-1">
+          <div class="mb-2 gap-1 grid grid-flow-row m-0">
             <span class="font-semibold whitespace-nowrap">Email:</span>
             <p class="text-[#4f5d77] whitespace-nowrap">haupham@gmail.com</p>
           </div>
-          <div class="flex gap-1">
+          <div class=" gap-1 grid grid-flow-row m-0">
             <span class="font-semibold whitespace-nowrap">Thời gian làm việc:</span>
             <p class="text-[#4f5d77] whitespace-nowrap">08:00 - 17:00, Thứ 2 - Thứ 7</p>
           </div>

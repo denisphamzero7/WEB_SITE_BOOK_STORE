@@ -9,7 +9,7 @@ const {
 const { verify } = require("jsonwebtoken");
 const sendMail = require("../untiles/sendemail");
 const crypto = require("crypto");
-const order = require("../models/order");
+
 
 //register
 const register = asynhandle(async (req, res) => {
@@ -38,41 +38,39 @@ const register = asynhandle(async (req, res) => {
 // Access token => xát thực ngươi dùng , phân quyền người dùng
 const login = asynhandle(async (req, res) => {
   const { email, password } = req.body;
-
-  if (!email || !password)
-    return res.status(400).json({
-      sucess: false,
-      message: "Missing inputs",
-    });
-  //plain object
-  const response = await User.findOne({ email });
-  if (response && (await response.isCorectPassword(password))) {
-    // tách password và role khỏi database
-    const { password, refreshToken, role, ...userData } = response.toObject();
-    //tạo access token
-    const accessToken = generateAcessToken(response._id, role);
-    //tạo refresh token
-    const newrefreshToken = generateRefreshToken(response._id);
-    //lưu refresh token vào database
-    await User.findByIdAndUpdate(
-      response._id,
-      { refreshToken: newrefreshToken },
-      { new: true }
-    );
-    //lưu refresh token vào cookie
-    res.cookie("refreshToken", newrefreshToken, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-    res.send({
-      status: 200,
-      success: true,
-      accessToken,
-      userData,
-    });
-  } else {
-    throw new Error("dăng nhập thất bại");
-  }
+    if (!email || !password)
+        return res.status(400).json({
+            sucess: false,
+            message: "Missing inputs",
+        });
+    //plain object
+    const response = await User.findOne({ email });
+    if (response && (await response.isCorrectPassword(password))) {
+        // tách password và role khỏi database
+        const { password, refreshToken, role, ...userData } = response.toObject();
+        //tạo access token
+        const accessToken = generateAcessToken(response._id, role);
+        //tạo refresh token
+        const newrefreshToken = generateRefreshToken(response._id);
+        //lưu refresh token vào database
+        await User.findByIdAndUpdate(
+            response._id,
+            { refreshToken: newrefreshToken },
+            { new: true }
+        );
+        //lưu refresh token vào cookie
+        res.cookie("refreshToken", newrefreshToken, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        return res.status(200).json({
+            success: true,
+            accessToken,
+            userData,
+        });
+    } else {
+        throw new Error("dăng nhập thất bại");
+    }
 });
 
 // get current user
@@ -157,14 +155,15 @@ const logout = asynhandle(async (req, res) => {
   });
 });
 //quên mật khẩu
+// forgotPassword
 const forgotPassword = asynhandle(async (req, res) => {
   const { email } = req.query;
   if (!email) throw new Error("missing email");
   const user = await User.findOne({ email });
   if (!user) throw new Error("user not found");
-  const resetToken = user.CreatePasswordToken();
+  const resetToken = user.createPasswordToken();
   await user.save();
-  const html = `xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.link này hết hạn sau 15p kể từ bây giờ, <a href= ${process.env.URL_CLIENT2}/user/resetpassword/${resetToken}> click here<a>`;
+  const html = `xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.link này hết hạn sau 15p kể từ bây giờ! cccc, <a href= ${process.env.URL_CLIENT}/resetpassword/${resetToken}> click here<a>`;
   const data = {
     email,
     html,
@@ -175,6 +174,7 @@ const forgotPassword = asynhandle(async (req, res) => {
     message: rs,
   });
 });
+
 // Client gửi email
 // Server check email có hợp lệ hay không => Gửi mail + kèm theo link (password change token)
 // Client check mail => click link
@@ -202,7 +202,7 @@ const resetpassword = asynhandle(async (req, res) => {
 
   return res.json({
     success: user ? true : false,
-    mes: user ? "update password" : "something went wrong",
+    mess: user ? "update password" : "something went wrong",
   });
 });
 //post user

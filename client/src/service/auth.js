@@ -2,7 +2,7 @@ import  axios  from '../helper/axios'
 class AuthService {
   async login(email,password) {
     try {
-      const response = await axios.post('/user/login', {email,password})
+      const response = await axios.post('user/login',{email,password})
       // Extract access token and user data from the response
       const {accessToken,userData} = response;
        // Save the access token and user data to local storage

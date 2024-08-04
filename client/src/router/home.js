@@ -21,7 +21,7 @@ const Home = [
     }
   },
   {
-    path: '/resetpassword',
+    path: '/resetpassword/:token',
     name: 'Reset-Password',
     component: ResetPassword,
     meta: {
