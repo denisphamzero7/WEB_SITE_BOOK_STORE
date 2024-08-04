@@ -11,10 +11,12 @@ const state ={
   wishlist: [] ,
   users:[],
   user:{},
-  statistical:{}
+  statistical:{},
+
 };
 
 const mutations ={
+ 
   SET_USERS(state,user){
    state.users = user
   },
@@ -106,6 +108,19 @@ const actions = {
     setTimeout(() => {
       dispatch('refreshToken');
     }, expiresIn);
+  },
+  async forgotPassword({commit},email){
+ try {
+  const response = await userService.forgotpassword(email)
+  const mail = response.message
+  console.log(mail)
+  return mail
+ } catch (error) {
+   // Handle error and provide more information
+   const errorMessage = error.response?.data?.message || 'An error occurred';
+   console.error('Forgot password error:', errorMessage);
+   throw new Error(errorMessage);
+ }
   },
   async fetchAllUsers({commit},payload){
     try {

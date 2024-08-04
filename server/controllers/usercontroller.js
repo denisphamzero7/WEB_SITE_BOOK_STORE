@@ -162,9 +162,9 @@ const forgotPassword = asynhandle(async (req, res) => {
   if (!email) throw new Error("missing email");
   const user = await User.findOne({ email });
   if (!user) throw new Error("user not found");
-  const resetToken = user.getResetPasswordToken();
+  const resetToken = user.CreatePasswordToken();
   await user.save();
-  const html = `xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.link này hết hạn sau 15p kể từ bây giờ, <a href= ${process.env.URL_SERVER}/api/user/resetpassword/${resetToken}> click here<a>`;
+  const html = `xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.link này hết hạn sau 15p kể từ bây giờ, <a href= ${process.env.URL_CLIENT2}/user/resetpassword/${resetToken}> click here<a>`;
   const data = {
     email,
     html,

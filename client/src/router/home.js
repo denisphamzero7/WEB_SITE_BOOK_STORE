@@ -10,11 +10,20 @@ import DetailProduct from '.././components/Product-Detail.vue'
 import CheckOut from '../pages/CheckOut.vue'
 import News from '../pages/News.vue'
 import HelpPage from '../pages/Help.vue'
+import ResetPassword from '../pages/auth/ResetPassword.vue'
 const Home = [
   {
     path: '/',
     name: 'Home-Page',
     component: HomePage,
+    meta: {
+      layout: HomeLayout
+    }
+  },
+  {
+    path: '/resetpassword',
+    name: 'Reset-Password',
+    component: ResetPassword,
     meta: {
       layout: HomeLayout
     }

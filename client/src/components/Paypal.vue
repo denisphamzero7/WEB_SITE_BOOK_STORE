@@ -99,6 +99,7 @@ export default {
               currency_code: 'USD',
               value: this.totalCartPrice
             },
+           
             
           }
         ]

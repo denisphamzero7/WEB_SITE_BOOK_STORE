@@ -1,8 +1,9 @@
+// YourComponent.vue
 <template>
   <div class="flex justify-center bg-slate-300">
     <div class="surface-card p-4 shadow-2 border-round w-full max-w-[500px] my-[100px] lg:w-6">
       <div class="text-center mb-5">
-        <div class="text-900 text-3xl font-medium mb-3">Welcome Book store</div>
+        <div class="text-900 text-3xl font-medium mb-3">Welcome to Bookstore</div>
         <span class="text-600 font-medium line-height-3">Don't have an account?</span>
         <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
       </div>
@@ -24,9 +25,7 @@
             <input type="checkbox" v-model="checked" id="checkbox" />
             <label for="rememberme1" class="ml-2">Remember me</label>
           </div>
-          <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
-            >Forgot password?</a
-          >
+          <a @click="triggerforgotPassword" class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
         </div>
 
         <button type="submit" label="Sign In" class="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600">Login</button>
@@ -43,9 +42,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import Toast from '../../components/Toast.vue'
-import router from '../../router/index'
+import { mapActions } from 'vuex';
+import Toast from '../../components/Toast.vue';
+import router from '../../router/index';
 
 export default {
   components: {
@@ -63,59 +62,85 @@ export default {
         backgroundcolor: ''
       },
       checked: false
-    }
+    };
   },
   mounted() {
-    const storedEmail = localStorage.getItem('email')
-    const storedPassword = localStorage.getItem('password')
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
     if (storedEmail && storedPassword) {
-      this.payload.email = storedEmail
-      this.payload.password = storedPassword
-      this.checked = true
+      this.payload.email = storedEmail;
+      this.payload.password = storedPassword;
+      this.checked = true;
     }
   },
   methods: {
-    ...mapActions('user', ['login', 'fetchcurrentuser']),
+    ...mapActions('user', ['login', 'fetchcurrentuser', 'forgotPassword']),
+   
     async success() {
       try {
-        const response = await this.login(this.payload)
+        const response = await this.login(this.payload);
         if (response) {
           if (this.checked) {
-            localStorage.setItem('email', this.payload.email)
-            localStorage.setItem('password', this.payload.password)
+            localStorage.setItem('email', this.payload.email);
+            localStorage.setItem('password', this.payload.password);
           } else {
-            localStorage.removeItem('email')
-            localStorage.removeItem('password')
+            localStorage.removeItem('email');
+            localStorage.removeItem('password');
           }
-          await this.fetchcurrentuser()
+          await this.fetchcurrentuser();
           this.Toast = {
             message: 'Login successful!',
             position: 'bottom-right',
             backgroundcolor: 'success'
-          }
+          };
           setTimeout(() => {
-            router.push({ name: 'Home-Page' })
-          }, 2000)
+            router.push({ name: 'Home-Page' });
+          }, 2000);
         } else {
           this.Toast = {
             message: 'Login failed',
             position: 'bottom-right',
             backgroundcolor: 'error'
-          }
+          };
         }
       } catch (error) {
         this.Toast = {
           message: 'Login error!',
           position: 'top-right',
           backgroundcolor: 'error'
+        };
+      }
+    },
+    async triggerforgotPassword() {
+      try {
+        const response = await this.forgotPassword(this.payload.email);
+        if (response) {
+          this.Toast = {
+            message: 'Password reset email sent!',
+            position: 'bottom-right',
+            backgroundcolor: 'success'
+          };
+          console.log(response);
+        } else {
+          this.Toast = {
+            message: 'Failed to send password reset email',
+            position: 'bottom-right',
+            backgroundcolor: 'error'
+          };
         }
+      } catch (error) {
+        this.Toast = {
+          message: 'Error sending password reset email',
+          position: 'top-right',
+          backgroundcolor: 'error'
+        };
       }
     },
     clearToast() {
-      this.Toast.message = ''
+      this.Toast.message = '';
     }
   }
-}
+};
 </script>
 
 <style scoped>

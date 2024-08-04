@@ -10,6 +10,7 @@ const CouponRouter = require("./coupon")
 const OrderRouter = require("./order")
 const BookCategory = require("./bookcategory")
 const {notFound ,errHandler}= require("../middlewares/errorhandler")
+const payment = require("./payments")
 const initrouter = (app) => {
     app.use('/api/user',useRouter)
     app.use('/api/product',productRouter)
@@ -22,6 +23,7 @@ const initrouter = (app) => {
     app.use('/api/coupon', CouponRouter)
     app.use('/api/order', OrderRouter )
     app.use('/api/bookcategory', BookCategory )
+    app.use('api/payment', payment)
     app.use(notFound)
     app.use(errHandler)
 }

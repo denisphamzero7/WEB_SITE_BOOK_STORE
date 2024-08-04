@@ -11,6 +11,16 @@ class UserService {
             console.log(error);
         }
     }
+    
+  async forgotpassword(email) {
+    try {
+      const response = await axios.get('user/forgotpassword', { params: { email } });
+      return response;
+    } catch (error) {
+      console.error('Error:', error.response?.data?.message || error.message);
+      throw error;
+    }
+  }
     async statistical(data){
       try {
           const response = await axios.get('user/statistical', data)
