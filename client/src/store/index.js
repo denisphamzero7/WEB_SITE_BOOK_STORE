@@ -7,7 +7,7 @@ import order from './module/order';
 import author from './module/author';
 import publisher from './module/publisher';
 import category from './module/category';
-import blog from './module/blog'
+import news from './module/news'
 const store = createStore({
     modules:{
         user,
@@ -18,7 +18,7 @@ const store = createStore({
         author,
         publisher,
         category,
-        blog
+        news
     }
 })
 export default store;

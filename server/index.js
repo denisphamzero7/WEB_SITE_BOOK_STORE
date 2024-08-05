@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const dbconnect = require('./config/dbconnect');
 const morgan = require('morgan');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 const app = express();
@@ -28,7 +30,15 @@ app.use(cookieParser());
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 initrouter(app);
-
+const server = http.createServer(app);
+const io = new Server(server);
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+app.set('socketio', io);
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Define the BookCategory schema
-const BlogCategorySchema = new mongoose.Schema({
+const NewsCategorySchema = new mongoose.Schema({
   title:{
     type: String,
     required: true,
@@ -15,5 +15,5 @@ const BlogCategorySchema = new mongoose.Schema({
 
 // Create the BookCategory model
 
-module.exports = mongoose.model('BlogCategory', BlogCategorySchema);
+module.exports = mongoose.model('newsCategory', NewsCategorySchema);
 

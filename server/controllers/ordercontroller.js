@@ -2,16 +2,13 @@
 const User = require("../models/user");
  const Coupon = require("../models/coupon"); 
 const asyncHandler = require('express-async-handler')
-const io = require('socket.io'); 
+
 const Product = require("../models/product"); 
 
 
 
 
-// Hàm để gửi thông báo khi có sự thay đổi trạng thái đơn hàng
-const sendOrderStatusUpdate = (orderId, status) => {
-  io.emit('orderStatusUpdate', { orderId, status });
-};
+
 // create a new Order 
 
 const createOrder = asyncHandler(async (req, res) => {
@@ -233,5 +230,5 @@ const getOrders = asyncHandler(async (req, res) => {
 
 
 module.exports = {
-    createOrder,updateStatus,getUserOrder,getOrders,sendOrderStatusUpdate,getAnOrder
+    createOrder,updateStatus,getUserOrder,getOrders,getAnOrder
 };

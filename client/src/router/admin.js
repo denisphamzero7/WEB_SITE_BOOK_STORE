@@ -8,9 +8,9 @@ import Orders from '../admin/ordermanager/index.vue'
 import ViewOrder from '../admin/ordermanager/ViewOrder.vue'
 import editproduct from '../admin/productmanager/EditProduct.vue'
 import createProduct from '../admin/productmanager/CreateProduct.vue'
-import Blog from '../admin/blogs/index.vue'
-import CreateBlog from '../admin/blogs/CreateBlog.vue'
-import EditBlog from '../admin/blogs/EditBlog.vue'
+import news from '../admin/news/index.vue'
+import Createnews from '../admin/news/CreateNews.vue'
+import Editnews from '../admin/news/EditNews.vue'
 const Admin = [
   {
     path: '/admin',
@@ -62,25 +62,25 @@ const Admin = [
   },
 
   {
-    path: '/admin/blog',
-    name: 'Blog-Manager',
-    component: Blog,
+    path: '/admin/news',
+    name: 'news-Manager',
+    component: news,
     meta: {
       layout: AdminLayout
     }
   },
   {
-    path: '/admin/blog/:bid',
-    name: 'Edit-Blog',
-    component: EditBlog,
+    path: '/admin/news/:bid',
+    name: 'Edit-news',
+    component: Editnews,
     meta: {
       layout: AdminLayout
     }
   },
   {
-    path: '/admin/blog',
-    name: 'Create-Blog',
-    component: CreateBlog,
+    path: '/admin/news',
+    name: 'Create-news',
+    component: Createnews,
     meta: {
       layout: AdminLayout
     }

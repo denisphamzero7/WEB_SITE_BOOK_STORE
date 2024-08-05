@@ -6,16 +6,16 @@
         {{ header }}
       </h1>
   
-      <!-- Add Blog Button -->
+      <!-- Add news Button -->
       <div class="flex justify-end mb-4">
-        <router-link :to="{ name: 'Create-Blog' }">
+        <router-link :to="{ name: 'Create-news' }">
           <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            Add Blog
+            Add news
           </button>
         </router-link>
       </div>
   
-      <!-- Blog Table -->
+      <!-- news Table -->
       <div class="bg-[#0f172ab3] p-4 rounded-lg shadow-lg overflow-x-auto">
         <input
           type="text"
@@ -36,20 +36,20 @@
           </thead>
           <tbody>
             <tr
-              v-for="blog in paginatedBlogs"
-              :key="blog._id"
+              v-for="news in paginatednews"
+              :key="news._id"
               class="odd:bg-gray-700 even:bg-gray-800 hover:bg-gray-600"
             >
-              <td class="py-3 px-4">{{ shortText(blog.title || 'No title available', 30) }}</td>
-              <td class="py-3 px-4">{{ blog.author || 'N/A' }}</td>
-              <td class="py-3 px-4">{{ blog.category || 'N/A' }}</td>
-              <td class="py-3 px-4">{{ blog.createdAt || 'N/A' }}</td>
+              <td class="py-3 px-4">{{ shortText(news.title || 'No title available', 30) }}</td>
+              <td class="py-3 px-4">{{ news.author || 'N/A' }}</td>
+              <td class="py-3 px-4">{{ news.category || 'N/A' }}</td>
+              <td class="py-3 px-4">{{ news.createdAt || 'N/A' }}</td>
               <td class="py-3 px-4">
-                <button @click="editBlog(blog)" class="text-blue-400 hover:text-blue-600">
+                <button @click="editnews(news)" class="text-blue-400 hover:text-blue-600">
                   Edit
                 </button>
                 <button
-                  @click="handleDeleteBlog(blog._id)"
+                  @click="handleDeletenews(news._id)"
                   class="text-red-500 hover:text-red-700 ml-2"
                 >
                   Delete
@@ -61,7 +61,7 @@
       </div>
       <div class="flex justify-center mt-4">
         <Pagination
-          :totalItems="totalBlogs"
+          :totalItems="totalnews"
           :itemsPerPage="itemsPerPage"
           :currentPage="currentPage"
           @page-changed="handlePageChange"
@@ -80,49 +80,49 @@
     },
     data() {
       return {
-        header: 'Blogs Manager',
+        header: 'news Manager',
         currentPage: 1,
         itemsPerPage: 4,
         searchQuery: ''
       }
     },
     mounted() {
-      this.fetchBlog()
+      this.fetchnews()
     },
     computed: {
-      ...mapGetters('blog', ['blogs']),
-      filteredBlogs() {
+      ...mapGetters('news', ['news']),
+      filterednews() {
         if (!this.searchQuery) {
-          return this.blogs
+          return this.news
         }
-        return this.blogs.filter((blog) =>
-          blog.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+        return this.news.filter((news) =>
+          news.title.toLowerCase().includes(this.searchQuery.toLowerCase())
         )
       },
-      totalBlogs() {
-        return this.filteredBlogs.length
+      totalnews() {
+        return this.filterednews.length
       },
-      paginatedBlogs() {
+      paginatednews() {
         const start = (this.currentPage - 1) * this.itemsPerPage
         const end = start + this.itemsPerPage
-        return this.filteredBlogs.slice(start, end)
+        return this.filterednews.slice(start, end)
       }
     },
     methods: {
-      ...mapActions('blog', ['fetchBlog', 'deleteAnBlog']),
+      ...mapActions('news', ['fetchnews', 'deleteAnnews']),
       shortText(text, maxLength) {
         return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
       },
-      editBlog(blog) {
-        this.$router.push({ name: 'Edit-Blog', params: { bid: blog._id } })
+      editnews(news) {
+        this.$router.push({ name: 'Edit-news', params: { bid: news._id } })
       },
-      async handleDeleteBlog(blogId) {
+      async handleDeletenews(newsId) {
         try {
-          await this.deleteAnBlog(blogId)
-          this.fetchBlog()
-          alert('deleteBlog')
+          await this.deleteAnnews(newsId)
+          this.fetchnews()
+          alert('deletenews')
         } catch (error) {
-          console.error('Error deleting blog:', error)
+          console.error('Error deleting news:', error)
         }
       },
       handlePageChange(page) {

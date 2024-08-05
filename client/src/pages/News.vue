@@ -2,7 +2,7 @@
     <div class="md:container mx-auto flex-col mt-[100px]">
         <span class="text-5xl font-bold py-4">Tin tức</span>
         <div class="my-3 overflow-scroll">
-            <News v-for="blog in blogs" :blog="blog" />
+            <News v-for="news in news" :news="news" />
         </div>
     </div>
 </template>
@@ -15,13 +15,13 @@ export default {
         News
     },
     computed: {
-        ...mapGetters('blog', ['blogs'])
+        ...mapGetters('news', ['news'])
     },
     mounted() {
-        this.fetchBlog();
+        this.fetchnews();
     },
     methods: {
-        ...mapActions('blog', ['fetchBlog']),
+        ...mapActions('news', ['fetchnews']),
     }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!getProductDetail" class="text-center py-4">
-      <p>Loading...</p>
+      <p >Loading...</p>
     </div>
     <div v-else>
       <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-4 justify-center">
@@ -50,16 +50,21 @@
       </div>
       <!-- Sản phẩm đề xuất -->
       <div class="container mx-auto mt-8">
-        <h1 class="text-xl lg:text-2xl font-bold mb-4">Sản phẩm được đề xuất</h1>
-        <div v-if="recommendedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div v-if="recommendedProducts.length > 0" >
+          <h1 class="text-xl lg:text-2xl font-bold mb-4">Sản phẩm được đề xuất</h1>
+          <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-6">
+            
           <Product
             v-for="product in recommendedProducts"
             :key="product._id"
             :product="product"
             @click="selectProduct(product._id)"
           />
+          </div>
         </div>
         <div v-else>
+          <h1 class="text-xl lg:text-2xl font-bold mb-4">Sản phẩm liên quan</h1>
           <div v-if="relatedProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <Product
               v-for="product in relatedProducts"

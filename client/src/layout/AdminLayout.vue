@@ -84,7 +84,7 @@ export default {
         { to: { name: 'Products' }, text: 'Products', icon: 'pi pi-list' },
         { to: { name: 'Users' }, text: 'Users', icon: 'pi pi-users' },
         { to: { name: 'Orders' }, text: 'Orders', icon: 'pi pi-cart-plus' },
-        { to: { name: 'Blog-Manager' }, text: 'Blogs', icon: 'pi pi-pencil ' },
+        { to: { name: 'news-Manager' }, text: 'news', icon: 'pi pi-pencil ' },
       ];
     },
   },

@@ -1,45 +1,45 @@
 import  axios  from '../helper/axios'
 
-class BlogService{
-    async getblogs(){
+class NewsService{
+    async getnews(){
         try {
-            const response = await axios.get("blog")
+            const response = await axios.get("news")
             console.log(response)
             return response
         } catch (error) {
             throw error
         }
     }
-    async getanblogs(blogId){
+    async getannews(newsId){
         try {
-            const response = await axios.get(`blog/one/${blogId}`)
+            const response = await axios.get(`news/one/${newsId}`)
             console.log(response)
             return response
         } catch (error) {
             throw error
         }
     }
-    async deleteanblog(blogId){
+    async deleteannews(newsId){
         try {
-            const response = await axios.delete(`blog/one/${blogId}`)
+            const response = await axios.delete(`news/one/${newsId}`)
             console.log(response)
             return response
         } catch (error) {
             throw error
         }
     }
-    async createblogs(data){
+    async createnews(data){
         try {
-            const response = await axios.post("blog",data)
+            const response = await axios.post("news",data)
             console.log(response)
             return response
         } catch (error) {
             throw error
         }
     }
-    async updateblogs(idblog,data) {
+    async updatenews(idnews,data) {
         try {
-            const response = await axios.put(`blog/${idblog}`, data);
+            const response = await axios.put(`news/${idnews}`, data);
             console.log(response);
             return response;
         } catch (error) {
@@ -47,4 +47,4 @@ class BlogService{
         }
     }
 }
-export default new BlogService();
+export default new NewsService();
