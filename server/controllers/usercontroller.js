@@ -83,7 +83,7 @@ const getaUser = asynhandle(async (req, res) => {
       path: "cart",
       populate: {
         path: "product",
-        select: "name images price quantity",
+        select: "name images price quantity ",
       },
     })
     .populate("wishlist", "name images price role");
@@ -319,7 +319,7 @@ const updateUserByAdmin = asynhandle(async (req, res) => {
 const updatecart = async (req, res) => {
   try {
     const { id } = req.user;
-    const { pid, quantity = 1 } = req.body;
+    const { pid, quantity = 1 ,price} = req.body;
 
     if (!pid) throw new Error("missing input");
 
@@ -333,7 +333,7 @@ const updatecart = async (req, res) => {
       user.cart[existingProductIndex] = { product: pid, quantity };
     } else {
       // Add a new product to the cart
-      user.cart.push({ product: pid, quantity });
+      user.cart.push({ product: pid, quantity,price });
     }
 
     const response = await User.findByIdAndUpdate(

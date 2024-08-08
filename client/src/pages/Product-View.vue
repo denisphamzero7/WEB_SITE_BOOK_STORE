@@ -9,7 +9,10 @@
     </div>
 
     <div class="bg-blue-300 w-full min-h-screen gap-5  flex-wrap flex justify-center items-center overflow-hidden md:px-10">
-      <Product class="mt-2" v-for="product in sortedProducts" :key="product._id" :product="product" />
+      <Product class="mt-2" v-for="product in paginatedProduct" :key="product._id" :product="product" />
+    </div>
+    <div>
+      <Pagination   :totalItems="sortedProducts.length" :itemsPerPage="itemsPerPage" :currentPage="currentPage" @page-changed="changePage" />
     </div>
   </div>
 </template>
@@ -17,9 +20,9 @@
 <script>
 import Product from '../components/Product.vue'
 import { mapActions, mapGetters } from 'vuex'
-
+import Pagination from '../components/Pagination.vue';
 export default {
-  components: { Product },
+  components: { Product ,Pagination},
   data() {
     return {
       sortOptions: [
@@ -28,6 +31,8 @@ export default {
         { value: 'price-high-to-low', label: 'Price High to Low' },
       ],
       selectedSortOption: 'relevance',
+      currentPage: 1,
+      itemsPerPage: 10,
     }
   },
   created() {
@@ -39,6 +44,11 @@ export default {
     sortedProducts() {
       return this.sortProductsBy(this.getProducts, this.selectedSortOption)
     },
+    paginatedProduct() {
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.sortedProducts.slice(start, end)
+    }
   },
   methods: {
    ...mapActions('product', ['fetchProduct','fetchProductbycategory']),
@@ -57,6 +67,10 @@ export default {
           return getProducts
       }
     },
+    changePage(page){
+      this.currentPage = page;
+    }
+
   },
 }
 </script>

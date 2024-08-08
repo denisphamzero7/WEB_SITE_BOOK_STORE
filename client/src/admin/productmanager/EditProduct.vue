@@ -14,6 +14,16 @@
           />
         </div>
         <div class="flex flex-col">
+          <label for="title" class="font-medium text-white">Title:</label>
+          <input
+            type="text"
+            v-model.lazy="getProductDetail.title"
+            id="title"
+            class="border p-2 rounded bg-gray-800 text-white"
+            required
+          />
+        </div>
+        <div class="flex flex-col">
           <label for="author" class="font-medium text-white">Author:</label>
           <select
             v-model.lazy="getProductDetail.author._id"
@@ -27,48 +37,72 @@
           </select>
         </div>
         <div class="flex flex-col">
-          <label for="category" class="font-medium text-white">Category:</label>
-          <select
-            v-model.lazy="getProductDetail.category"
-            id="category"
-            class="border p-2 rounded bg-gray-800 text-white"
-            required
-          >
-            <option v-for="category in allCategory" :key="category._id" :value="category._id">
-              {{category.title }}
-            </option>
-          </select>
-        </div>
-        <div class="flex flex-col">
-        <label for="bookcategory" class="font-medium text-white">Bookcategory:</label>
-        <select
-          v-model="getProductDetail.bookcategory"
-          id="bookcategory"
-          class="border p-2 rounded bg-gray-800 text-white"
-          multiple
-          required
-        >
-          <option
-            v-for="bookcategory in allbookcategory"
-            :key="bookcategory._id"
-            :value="bookcategory.title"
-          >
-            {{ bookcategory.title }}
-          </option>
-        </select>
-      </div>
-        <div class="flex flex-col">
           <label for="publisher" class="font-medium text-white">Publisher:</label>
           <select
             v-model.lazy="getProductDetail.publisher._id"
             id="publisher"
             class="border p-2 rounded bg-gray-800 text-white"
+            
             required
           >
             <option v-for="publisher in allPublishers" :key="publisher._id" :value="publisher._id">
               {{ publisher.title }}
             </option>
           </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="category" class="font-medium text-white">Category:</label>
+          <select
+            v-model.lazy="getProductDetail.category"
+            id="category"
+            class="border p-2 rounded bg-gray-800 text-white"
+            
+            required
+          >
+            <option v-for="category in allCategory" :key="category._id" :value="category._id">
+              {{ category.title }}
+            </option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="bookcategory" class="font-medium text-white">Book Category:</label>
+          <select
+            v-model="getProductDetail.bookcategory"
+            id="bookcategory"
+            class="border p-2 rounded bg-gray-800 text-white"
+            multiple
+            required
+          >
+            <option
+              v-for="bookcategory in allbookcategory"
+              :key="bookcategory._id"
+              :value="bookcategory.title"
+            >
+              {{ bookcategory.title }}
+            </option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="language" class="font-medium text-white">Language:</label>
+          <select
+            v-model="getProductDetail.language"
+            id="language"
+            class="border p-2 rounded bg-gray-800 text-white"
+          >
+            <option value="english">English</option>
+            <option value="korean">Korean</option>
+            <option value="vietnamese">Vietnamese</option>
+            <option value="chinese">Chinese</option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="material" class="font-medium text-white">Material:</label>
+          <input
+            type="text"
+            v-model.lazy="getProductDetail.material"
+            id="material"
+            class="border p-2 rounded bg-gray-800 text-white"
+          />
         </div>
         <div class="flex flex-col">
           <label for="description" class="font-medium text-white">Description:</label>
@@ -90,6 +124,16 @@
           />
         </div>
         <div class="flex flex-col">
+          <label for="discount" class="font-medium text-white">Discount:</label>
+          <input
+            type="number"
+            v-model.lazy="getProductDetail.discount"
+            id="discount"
+            min="0"
+            class="border p-2 rounded bg-gray-800 text-white"
+          />
+        </div>
+        <div class="flex flex-col">
           <label for="quantity" class="font-medium text-white">Quantity:</label>
           <input
             type="number"
@@ -99,7 +143,11 @@
             required
           />
         </div>
-        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600" :disabled="loading">
+        <button
+          type="submit"
+          class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          :disabled="loading"
+        >
           Update
         </button>
         <div v-if="error" class="text-red-500 mt-2">{{ error }}</div>
@@ -116,7 +164,11 @@
           class="block w-full px-4 py-2 border rounded-md text-gray-700 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
         />
         <div class="flex justify-center mt-4">
-          <img :src="getProductDetail.images[0]" class="w-24 h-24 object-cover rounded" alt="Product Image">
+          <img
+            :src="getProductDetail.images[0]"
+            class="w-24 h-24 object-cover rounded"
+            alt="Product Image"
+          />
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
           <div
@@ -125,7 +177,11 @@
             class="cursor-pointer"
             @click="selectImage(image, index)"
           >
-            <img :src="image" class="w-24 h-24 object-cover rounded border-2 border-transparent hover:border-blue-500" alt="Product Image">
+            <img
+              :src="image"
+              class="w-24 h-24 object-cover rounded border-2 border-transparent hover:border-blue-500"
+              alt="Product Image"
+            />
           </div>
         </div>
       </div>
@@ -137,85 +193,87 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import debounce from 'lodash/debounce';
-import router from '../../router/index'
+import { mapGetters, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
+
 export default {
   data() {
     return {
       success: false,
       selectedImage: []
-    };
+    }
   },
   computed: {
-    ...mapGetters('product', ['getProductDetail', 'loading', 'error','allbookcategory']),
+    ...mapGetters('product', ['getProductDetail', 'loading', 'error', 'allbookcategory']),
     ...mapGetters('author', ['allAuthors']),
     ...mapGetters('publisher', ['allPublishers']),
-    ...mapGetters('category', ['allCategory']),
+    ...mapGetters('category', ['allCategory'])
   },
   created() {
-    const productId = this.$route.params.id;
-    this.fetchProductDetail(productId);
-    this.fetchAuthors();
-    this.fetchPublisher();
-    this.fetchCategory();
+    const productId = this.$route.params.id
+    this.fetchProductDetail(productId)
+    this.fetchAuthors()
+    this.fetchPublisher()
+    this.fetchCategory()
     this.fetchBookCategory()
   },
   methods: {
-    ...mapActions('product', ['fetchProductDetail', 'updateproduct', 'uploadimageproduct','fetchBookCategory']),
+    ...mapActions('product', [
+      'fetchProductDetail',
+      'updateproduct',
+      'uploadimageproduct',
+      'fetchBookCategory'
+    ]),
     ...mapActions('author', ['fetchAuthors']),
     ...mapActions('publisher', ['fetchPublisher']),
     ...mapActions('category', ['fetchCategory']),
     updateProduct: debounce(async function () {
       try {
-        const id = this.$route.params.id;
-        const data = this.getProductDetail;
-        await this.updateproduct({ pid: id, data: data });
-        this.success = true;
+        const id = this.$route.params.id
+        const data = this.getProductDetail
+        await this.updateproduct({ pid: id, data: data })
+        this.success = true
         setTimeout(() => {
-          this.success = false;
+          this.success = false
           this.$router.push('/admin/products')
-        }, 2000); 
-       
+        }, 2000)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }, 500),
     async onFileChange(event) {
-      const files = Array.from(event.target.files);
-      const promises = files.map(file => {
-        const formData = new FormData();
-        formData.append('images', file);
+      const files = Array.from(event.target.files)
+      const promises = files.map((file) => {
+        const formData = new FormData()
+        formData.append('images', file)
         return this.uploadimageproduct({ pid: this.$route.params.id, data: formData }).then(() => {
-          const reader = new FileReader();
+          const reader = new FileReader()
           reader.onload = (e) => {
-            this.getProductDetail.images.unshift(e.target.result);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
+            this.getProductDetail.images.unshift(e.target.result)
+          }
+          reader.readAsDataURL(file)
+        })
+      })
 
       try {
-        await Promise.all(promises);
+        await Promise.all(promises)
       } catch (error) {
-        console.error('Error uploading images:', error);
+        console.error('Error uploading images:', error)
       }
     },
     async selectImage(image, index) {
-      this.getProductDetail.images.unshift(
-        this.getProductDetail.images.splice(index, 1)[0]
-      );
+      this.getProductDetail.images.unshift(this.getProductDetail.images.splice(index, 1)[0])
       try {
-        const data = { ...this.getProductDetail };
-        await this.updateproduct({ pid: this.$route.params.id, data: data });
-        this.success = true;
+        const data = { ...this.getProductDetail }
+        await this.updateproduct({ pid: this.$route.params.id, data: data })
+        this.success = true
         setTimeout(() => {
-          this.success = false;
-        }, 3000); // Hide success message after 3 seconds
+          this.success = false
+        }, 3000) // Hide success message after 3 seconds
       } catch (error) {
-        console.error('Error updating product with selected image:', error);
+        console.error('Error updating product with selected image:', error)
       }
     }
   }
-};
+}
 </script>

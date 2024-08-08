@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Product = require("../models/product");
 const Author = require("../models/author");
 const Order = require("../models/order")
+const ProductCategory = require("../models/productcategory");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 const User  = require("../models/user")
@@ -24,8 +25,12 @@ const createProduct = asyncHandler(async (req, res) => {
         });
       }
       const imagePaths = req.files ? req.files.filter(i => i.path).map(i => i.path) : [];
+        // Calculate discountedPrice before creating the product
+  const price = req.body.price;
+  const discount = req.body.discount;
+  const discountedPrice = price - (price * (discount / 100));
       
-      const newProduct = await Product.create({...req.body, images: imagePaths});
+      const newProduct = await Product.create({...req.body, images: imagePaths, discountedPrice});
 
   if (req.body.author) {
     const author = await Author.findByIdAndUpdate(
@@ -43,6 +48,7 @@ const createProduct = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: newProduct ? true : false,
     createProduct: newProduct ? newProduct : "cannot create new product",
+    discountedPrice: newProduct ? newProduct.discountedPrice : null,
   });
 });
 
@@ -83,9 +89,9 @@ const allProducts = asyncHandler(async (req, res) => {
   queryCommand
     .skip(skip)
     .limit(limit)
-    .populate("author publisher category", "name title")
+    .populate("author publisher bookcategory", "name title")
     .populate({
-      path:'bookcategory',
+      path:'category',
       select:'title',
      })
 
@@ -280,7 +286,7 @@ const recommendProduct = asyncHandler(async (req, res) => {
 
       response = await Product.find({
         _id: { $in: recommend?.data?.response },
-      }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } })
+      }).populate({ path: 'category', populate: { path: 'title', model: 'ProductCategory' } })
 
       console.log(response)
     }

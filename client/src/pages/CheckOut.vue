@@ -19,7 +19,7 @@
             <td class="py-2 text-center">{{ index + 1 }}</td>
             <td class="py-2">{{ item.product.name }}</td>
             <td class="py-2 text-center">{{ item.quantity }}</td>
-            <td class="py-2 text-center">{{ item.product.price }}</td>
+            <td class="py-2 text-center">{{ item.price }}</td>
           </tr>
         </tbody>
       </table>
@@ -68,7 +68,7 @@ export default {
     ...mapGetters('user', ['cart', 'User']),
 
     totalCartPrice() {
-      return this.cart.reduce((total, item) => total + item.product.price * item.quantity, 0).toFixed(2)
+      return this.cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
     }
   },
   methods: {

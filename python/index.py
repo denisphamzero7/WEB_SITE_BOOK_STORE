@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, json, request
 import time
 import numpy as np
+import pandas as pd
 import pymongo
 import csv
 import xxhash
@@ -14,7 +15,6 @@ myclient = pymongo.MongoClient("mongodb+srv://haudaipro:haudaipro123@booksdb.4op
 mydb = myclient["bookapp"]
 mycol = mydb["products"]
 myCustomers = mydb["users"]
-# myRatings = mydb["ratings"]
 myCategories = mydb["bookcategories"]
 reverse_mapping = {}
 userList = []
@@ -22,7 +22,6 @@ itemList = []
 
 print("Number of items loaded from MongoDB:", mycol)
 print("Number of users loaded from MongoDB:", myCustomers)
-# Sau khi tải mục và người dùng từ MongoDB
 n_items = mycol.count_documents({})
 n_users = myCustomers.count_documents({})
 n_category = myCategories.count_documents({})
@@ -93,10 +92,12 @@ with open("./users.csv", 'w', encoding='UTF8') as f:
 csvHeaderNonRating = ["productid", "title", "genres"]
 with open('./nonproducts.csv', 'w', encoding='UTF8') as f:
     f.truncate()
-    f.write(csvHeaderNonRating[0]+","+csvHeaderNonRating[1]+","+csvHeaderNonRating[2])
+    f.write(",".join(csvHeaderNonRating) + "\n")
     for x in mycol.find():
         categories = "|".join(x["bookcategory"])
-        row = "\n"+str(hash_string(str(x["_id"])))+","+str(x["title"])+","+categories
+        # Ensure proper formatting with quotes if there are any commas in the data
+        row = f'{str(hash_string(str(x["_id"])))},"{str(x["title"])}","{categories}"\n'
+        print(f"Writing row: {row.strip()}")
         f.write(row)
     f.close()
 
@@ -104,32 +105,26 @@ with open('./nonproducts.csv', 'w', encoding='UTF8') as f:
 
 ##### END Pre-processing data
 
-
-u_cols =  ['user_id', 'username']
-# user information
+# Load user data
+u_cols = ['user_id', 'username']
 users = pd.read_csv('./users.csv', sep='|', names=u_cols, encoding='latin-1', index_col="user_id")
 n_users = users.shape[0]
 
-# user rating product
+# Load user rating data
 ratings_base = pd.read_csv('./ratings.csv', sep='\t', names=r_cols, encoding='latin-1')
-# ratings_test = pd.read_csv('ml-100k/ua.test', sep='\t', names=r_cols, encoding='latin-1')
-
 rate_train = ratings_base.values
-# rate_test = ratings_test.values
 
+# Load item data
 i_cols = csvHeaderRating + list(itemCategoryList.keys())
-
 items = pd.read_csv('./products.csv', sep='|', names=i_cols, encoding='latin-1', index_col="product_id")
 n_items = items.shape[0]
 
+# Initialize models
 collaborativeModel = Collaborative(users=users, products=items, ratings=ratings_base)
 collaborativeModel.fit()
 
 X0 = items.values
 X_train_counts = X0[:, -categoryCount:]
-
-# cb = Contentbased(rate_train, X_train_counts, n_users= n_users, n_items = n_items, items = items, users = users, lamda=7)
-# cb.fit(userList)
 
 cbEntity = CB("./nonproducts.csv")
 cbEntity.fit()
@@ -140,7 +135,6 @@ print('--- %s seconds ---' % (time.time() - start_time))
 def index():
     userId = request.args.get('q')
     userIdHashed = hash_string(userId)
-    # predict = cb.recommend(int(userIdHashed), 4)
     predict = collaborativeModel.predict(int(userIdHashed), 4)
     print(predict)
     recommendList = []
@@ -164,6 +158,5 @@ def nonrating():
         print(productId)
     response = np.array(recommendList).tolist()
     return json.dumps({"response": response})
-
 
 app.run(port=5500)

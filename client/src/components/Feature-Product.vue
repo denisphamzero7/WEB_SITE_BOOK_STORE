@@ -7,7 +7,12 @@
       <i class="pi pi-arrow-circle-left text-xl"></i>
     </button>
     <div class="flex overflow-hidden">
-      <transition-group v-bind="$attrs" class="flex w-full overflow-x-auto gap-3" name="slide">
+      <transition-group
+        v-bind="$attrs"
+        class="flex w-full overflow-x-auto gap-3"
+        name="slide"
+        tag="div"
+      >
         <Product
           v-for="(product, index) in visibleProducts"
           :key="product._id"

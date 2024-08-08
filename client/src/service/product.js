@@ -15,7 +15,7 @@ class ProductService {
   // Cập nhật rating sản phẩm
   async updateRatingProduct(data) {
     try {
-      const response = await axios.put('/product/ratings', data);
+      const response = await axios.put('product/ratings', data);
       return response;
     } catch (error) {
       throw error;
@@ -25,7 +25,7 @@ class ProductService {
   // Cập nhật sản phẩm
   async updateProduct({pid,data}) {
     try {
-      const response = await axios.put(`/product/${pid}`,data);
+      const response = await axios.put(`product/${pid}`,data);
       console.log(response);
       return response;
     } catch (error) {
@@ -34,7 +34,7 @@ class ProductService {
   }
   async createProduct(data) {
     try {
-      const response = await axios.post(`/product`,data,{
+      const response = await axios.post(`product`,data,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }});

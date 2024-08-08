@@ -1,13 +1,20 @@
 <template>
   <div>
-    <div v-if="!getProductDetail" class="text-center py-4">
-      <p >Loading...</p>
+    <!-- Product Details -->
+    <div v-if="!getProductDetail" class="text-center py-4 animate-spin">
+      <p>Loading...</p>
     </div>
     <div v-else>
       <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-4 justify-center">
-        <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md">
+        <div class="relative overflow-hidden rounded-lg border border-gray-300 shadow-md h-64">
+          <!-- Discount Badge -->
+          <template v-if="getProductDetail.discount > 0">
+            <div class="absolute top-2 right-2 animate-pulse bg-gradient-to-r from-red-500 to-yellow-500 text-white px-2 py-1 text-sm font-bold rounded-lg">
+              - {{ getProductDetail.discount }}% OFF
+            </div>
+          </template>
           <img
-            class="w-64 p-2 rounded-t-lg"
+            class="w-64 p-2 rounded-t-lg "
             :src="productDetail.images[0]"
             :alt="productDetail.name"
           />
@@ -25,10 +32,19 @@
             <a-rate :value="getstar" allowHalf />
             <span class="text-xl text-red-600 ml-3">{{ getstar }} đánh giá</span>
           </div>
-          <div class="text-xl lg:text-2xl font-medium mb-4">Price: {{ formatPrice }}</div>
+          <div class="text-xl lg:text-2xl font-medium mb-4">
+            <template v-if="getProductDetail.discountedPrice> 0">
+              <span>Giá :</span>
+              <span class="line-through text-gray-500">{{ getProductDetail.price }}$</span>
+              <span class="text-red-600 ml-2 font-bold">{{ getProductDetail.discountedPrice }}$</span>
+            </template>
+            <template v-else>
+              <span>Giá</span>:<span class="text-xl font-bold">{{ getProductDetail.price}}$</span>
+            </template>
+          </div>
           <div class="mb-4">
             <span class="text-xl">Thể loại sách:</span>
-            {{ formatBookCategories(productDetail.bookcategory) }}
+            {{ productDetail.title }}
           </div>
           <div class="text-lg mb-6">{{ productDetail.description }}</div>
           <div class="flex items-center mb-4">
@@ -48,19 +64,17 @@
           <button @click.prevent="addToCart" class="btn btn-green lg:w-1/2">Add to Cart</button>
         </div>
       </div>
-      <!-- Sản phẩm đề xuất -->
+      <!-- Recommended Products -->
       <div class="container mx-auto mt-8">
-        
-        <div v-if="recommendedProducts.length > 0" >
+        <div v-if="recommendedProducts.length > 0">
           <h1 class="text-xl lg:text-2xl font-bold mb-4">Sản phẩm được đề xuất</h1>
-          <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-6">
-            
-          <Product
-            v-for="product in recommendedProducts"
-            :key="product._id"
-            :product="product"
-            @click="selectProduct(product._id)"
-          />
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Product
+              v-for="product in recommendedProducts"
+              :key="product._id"
+              :product="product"
+              @click="selectProduct(product._id)"
+            />
           </div>
         </div>
         <div v-else>
@@ -76,9 +90,8 @@
           <div v-else class="text-red-600 text-lg">No related products found.</div>
         </div>
       </div>
-      <!-- Phần nhận xét và đánh giá -->
+      <!-- Comments and Ratings -->
       <div class="container mx-auto mt-8">
-        <!-- Nội dung nhận xét và đánh giá -->
         <h1 class="text-xl lg:text-2xl font-bold mb-4">Comments and Ratings</h1>
         <div v-if="productDetail.rating && productDetail.rating.length > 0" class="mb-6">
           <div
@@ -131,6 +144,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -192,7 +206,7 @@ export default {
         if (availableQuantity === 0) {
           alert('sản phẩm hết hàng')
         } else {
-          const data = { pid: this.getProductDetail._id, quantity: this.countProducts }
+          const data = { pid: this.getProductDetail._id, quantity: this.countProducts ,price:this.productDetail.discountedPrice > 0 ? this.productDetail.discountedPrice : this.productDetail.price}
           const response = await this.addProductToCart(data)
           if (!response) {
             alert('bạn chưa đăng nhập')
@@ -249,14 +263,22 @@ export default {
         (product) => product.author?._id === authorId && product._id !== this.getProductDetail._id
       )
     },
-    formatPrice() {
-      if (typeof this.productDetail.price !== 'number') {
+ 
+    formatDiscountedPrice() {
+      if (typeof this.productDetail.discountedPrice !== 'number') {
         return 'Invalid Price'
       }
-      return this.productDetail.price.toLocaleString('en-US', {
+      return this.productDetail.discountedPrice.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD'
       })
+    },
+    discountPercentage() {
+      if (this.productDetail.discountedPrice > 0) {
+        const discount = ((this.productDetail.price - this.productDetail.discountedPrice) / this.productDetail.price) * 100
+        return discount.toFixed(2)
+      }
+      return 0
     },
     productDetail() {
       return this.getProductDetail || {}

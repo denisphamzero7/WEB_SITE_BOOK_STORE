@@ -45,6 +45,7 @@ const createOrder = asyncHandler(async (req, res) => {
     }
 
     product.quantity -= item.quantity;
+    product.sold += item.quantity; // Update the sold quantity
     await product.save();
   }
 

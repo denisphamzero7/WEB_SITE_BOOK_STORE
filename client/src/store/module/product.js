@@ -197,7 +197,8 @@ const actions = {
     try {
       const response = await ProductService.updateProduct({pid,data});
       const updateAnProduct = response.product
-      console.log(updateAnProduct);
+      // console.log(updateAnProduct);
+      console.log(typeof updateAnProduct)
       commit('SET_AN_PRODUCT', updateAnProduct);
       commit('SET_ERROR', null);
       return updateAnProduct;

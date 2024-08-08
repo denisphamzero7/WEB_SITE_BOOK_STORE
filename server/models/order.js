@@ -26,6 +26,13 @@ var orderSchema = new mongoose.Schema({
     timestamps: true,
    
 });
-
+// orderSchema.post('save', async function (doc, next) {
+//     for (const item of doc.products) {
+//       await Product.findByIdAndUpdate(item.product, {
+//         $inc: { sold: item.quantity, quantity: -item.quantity },
+//       });
+//     }
+//     next();
+//   });
 //Export the model
 module.exports = mongoose.model('Order', orderSchema);

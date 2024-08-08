@@ -2,7 +2,8 @@ const BookCategory = require("../models/bookcategory");
 const asyncHandler = require("express-async-handler");
 
 const createBookCategory = asyncHandler(async (req, res) => {
-    
+    const {title}= req.body;
+    if (!title) throw new Error('missing inputsđ');
     const response = await BookCategory.create(req.body);
     res.status(200).json({
         success: response ? true : false,

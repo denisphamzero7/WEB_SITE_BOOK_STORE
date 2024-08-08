@@ -1,7 +1,11 @@
+```html
 <template>
   <div class="card-product cursor-pointer p-2 relative">
     <div class="overflow-hidden relative">
       <img :src="getImageSrc(product?.images)" :alt="product.name" class="h-[200px] w-[300px] object-cover rounded-xl transform hover:scale-125 transition-transform" />
+      <span v-if="product.discount > 0" class="discount-badge absolute top-2 right-2 font-bold text-sm p-2 rounded-full px-4 animate-pulse bg-gradient-to-r from-red-500 to-yellow-500 text-white">
+        Sale {{ product.discount }}%
+      </span>
     </div>
     <div
       class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"
@@ -26,11 +30,11 @@
     </div>
     <div class="p-2 flex flex-col items-center">
       <h2 class="font-bold text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:line-clamp-none">{{ shortname(product.name) }}</h2>
-      <h3>Author : {{ product.author?.name }}</h3>
+      <h3>Author : {{ product.author?.name}}</h3>
       <div class="flex items-center gap-2">
-        <span class="font-bold text-sm p-2 bg-yellow-300 rounded-s-2xl text-gray-600">sale 10%</span>
-        <span class="text-sm line-through opacity-75">800</span>
-        <span class="text-xl font-semibold">{{ product.price }}</span>
+        <span v-if="product.discount > 0" class="text-sm line-through opacity-75">{{ product.price }}</span>
+        <span v-if="product.discount > 0" class="text-xl font-semibold">{{ product.discountedPrice }}</span>
+        <span v-else class="text-xl font-semibold">{{ product.price }}</span>
         <button @click.prevent="addToCart" class="relative">
           <div class=" hidden absolute bg-red-500 text-antiquewhite p-1 rounded transform -translate-x-1/2 -top-9 transition-opacity duration-300 after:content-[''] after:absolute after:top-full after:left-1/2 after:-ml-1 after:border-5 after:border-t-red-500 after:border-transparent">
             buy
@@ -55,6 +59,7 @@ import ModalProduct from './Modal-Product.vue';
 import { mapActions, mapGetters } from 'vuex';
 import Toast from './Toast.vue';
 import Tooltip from 'primevue/tooltip';
+import product from '@/service/product';
 
 export default {
   components: { ModalProduct, Toast, Tooltip },
@@ -83,11 +88,24 @@ export default {
       } else {
         return false;
       }
+    },
+    author(){
+      if (this.product && this.product.author && Array.isArray(this.product.author)) {
+        return this.product.author.map(item => item.name).join(', ');
+      }
+      return '';
+    
     }
   },
   methods: {
     ...mapActions('product', ['openProductModal', 'getcountproducts']),
     ...mapActions('user', ['addProductToCart', 'updatewishlist', 'fetchcurrentuser']),
+    getAuthorNames() {
+      if (this.product && this.product.author && Array.isArray(this.product.author)) {
+        return this.product.author.map(item => item.name).join(', ');
+      }
+      return '';
+    },
     
     getImageSrc(images) {
       if (Array.isArray(images)) {
@@ -144,7 +162,8 @@ export default {
         try {
           const cartData = {
             pid: this.product._id,
-            quantity: this.getcountproducts
+            quantity: this.getcountproducts,
+            price: this.product.discount > 0 ? this.product.discountedPrice : this.product.price
           };
           await this.addProductToCart(cartData);
           this.Toast = {
@@ -168,5 +187,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
+
 </style>
+
+

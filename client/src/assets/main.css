@@ -34,19 +34,6 @@
   
 }
 
-.p-rating-star .p-rating-icon {
-    color: yellow;
-  }
-  .input-field {
-    @apply w-full border rounded py-2 px-3 text-gray-700 focus:outline-none focus:border-blue-500;
-  }
-  
-  .btn-primary {
-    @apply bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer;
-  }
-.bgadmin{
-   @apply bg-gray-700
-}
 
 @font-face {
   font-family: 'Roboto1';
@@ -163,5 +150,4 @@
   font-style: italic;
   font-display: swap;
 }
-
 

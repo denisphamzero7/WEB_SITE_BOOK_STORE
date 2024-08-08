@@ -14,7 +14,7 @@
         />
       </div>
       <div class="flex flex-col">
-        <label for="name" class="font-medium text-white">Title:</label>
+        <label for="title" class="font-medium text-white">Title:</label>
         <input
           type="text"
           v-model="product.title"
@@ -65,6 +65,7 @@
           v-model="product.category"
           id="category"
           class="border p-2 rounded bg-gray-800 text-white"
+         
           required
         >
           <option v-for="category in allCategory" :key="category._id" :value="category._id">
@@ -95,8 +96,18 @@
         <label for="price" class="font-medium text-white">Price:</label>
         <input
           type="number"
-          v-model="product.price"
+          v-model.number="product.price"
           id="price"
+          class="border p-2 rounded bg-gray-800 text-white"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="discount" class="font-medium text-white">Discount:</label>
+        <input
+          type="number"
+          v-model.number="product.discount"
+          id="discount"
           class="border p-2 rounded bg-gray-800 text-white"
           required
         />
@@ -105,7 +116,7 @@
         <label for="quantity" class="font-medium text-white">Quantity:</label>
         <input
           type="number"
-          v-model="product.quantity"
+          v-model.number="product.quantity"
           id="quantity"
           class="border p-2 rounded bg-gray-800 text-white"
           required
@@ -123,6 +134,7 @@
         />
         <div class="flex justify-center mt-4">
           <img
+            v-if="product.images.length > 0"
             :src="product.images[0]"
             class="w-24 h-24 object-cover rounded"
             alt="Product Image"
@@ -157,12 +169,14 @@ export default {
         description: '',
         price: '',
         quantity: '',
+        discount: '',
         images: [],
         author: '',
         publisher: '',
-        category: '',
-        bookcategory: []
-      }
+        category: [],
+        bookcategory: ''
+      },
+      images: []
     }
   },
   created() {
@@ -193,9 +207,11 @@ export default {
         formData.append('description', this.product.description)
         formData.append('price', this.product.price)
         formData.append('quantity', this.product.quantity)
+        formData.append('discount', this.product.discount)
+        
         this.product.bookcategory.forEach((categoryId) => {
-          formData.append('bookcategory', categoryId)
-        })
+        formData.append('bookcategory', categoryId);
+      });
 
         for (let i = 0; i < this.images.length; i++) {
           formData.append('images', this.images[i])
