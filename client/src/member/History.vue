@@ -40,7 +40,7 @@
               <td class="py-3 px-4 text-sm text-gray-900">
                 <ul>
                   <li v-for="el in item.products" :key="el._id" class="flex items-center space-x-2 mb-2">
-                    <img :src="el.product.images[0]" class="w-16 h-16" alt="">
+                    <img :src="el.product.images" class="w-16 h-16" alt="">
                     <div>
                       <span class="block text-gray-900">{{ el.product.name }}</span>
                       <span class="block text-gray-500">Quantity: {{ el.quantity }}</span>

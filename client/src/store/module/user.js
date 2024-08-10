@@ -259,6 +259,9 @@ async fetchcart({commit},cartItems){
   const response = await userService.getcurrentuser(cartItems)   
   const Cart = response.result.cart
   console.log(Cart);
+  Cart.forEach(cartItem => {
+    console.log("Cart Item Price:", cartItem.price);
+  });
   commit('SET_CART', Cart);
       return Cart
       

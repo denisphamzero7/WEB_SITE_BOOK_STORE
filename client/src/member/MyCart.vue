@@ -18,7 +18,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full sm:pl-4">
           <div class="flex flex-col w-full">
             <p class="text-gray-800 font-semibold text-lg">{{ cartItem.product?.name }}</p>
-            <p class="text-gray-500">Giá: {{ cartItem.product?.price }}$</p>
+            <p class="text-gray-500">Giá: {{ cartItem.price }}$</p>
             <div class="flex items-center mt-2">
               <input
                 type="number"
@@ -91,10 +91,14 @@ export default {
   computed: {
     ...mapGetters('user', ['cart']),
     totalCartPrice() {
-      return this.cart.reduce((total, cartItem) => {
-        return total + cartItem.product.price * cartItem.quantity
-      }, 0).toFixed(2)
-    },
+      const total = this.cart.reduce((total, cartItem) => {
+      return total + cartItem?.price * cartItem.quantity;
+    }, 0).toFixed(2);
+
+    console.log("Tổng giá tiền:", total);
+    return total;
+  }
+   
   },
   methods: {
     ...mapActions('user', ['deleteProductToCart', 'fetchcart', 'addProductToCart']),
