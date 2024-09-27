@@ -2,7 +2,9 @@
   <div>
     <!-- Product Details -->
     <div v-if="!getProductDetail" class="text-center py-4 animate-spin">
-      <p>Loading...</p>
+      <div class="card flex justify-center">
+        <ProgressSpinner />
+    </div>
     </div>
     <div v-else>
       <div class="container mx-auto flex flex-col lg:flex-row my-6 gap-4 justify-center">
@@ -153,8 +155,10 @@ import Rating from './Rating.vue'
 import { format } from 'date-fns'
 import Toast from './Toast.vue'
 
+import ProgressSpinner from 'primevue/progressspinner';
+
 export default {
-  components: { Rating, Toast, Product },
+  components: { Rating, Toast, Product ,ProgressSpinner },
   data() {
     return {
       Toast: {

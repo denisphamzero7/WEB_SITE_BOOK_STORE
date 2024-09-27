@@ -2,7 +2,7 @@
   <div class="flex flex-col w-64 bg-gradient-to-b from-purple-700 to-blue-500 h-[150vh]">
     <div class="bg-purple-900 h-15 flex items-center justify-center">
       <div class="overflow-hidden py-2">
-        <img :src="User.avatar ? User.avatar : defaultAvatar" class="rounded-full w-[40px] h-[40px]" />
+        <img :src="User?.avatar || defaultAvatar" class="rounded-full w-[40px] h-[40px]" />
         <span class="text-xl font-bold text-white">{{ User.firstname }}</span>
       </div>
     </div>

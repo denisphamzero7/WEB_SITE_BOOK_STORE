@@ -68,7 +68,7 @@ export default {
     ...mapGetters('user', ['cart', 'User']),
 
     totalCartPrice() {
-      return this.cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+      return this.cart.reduce((total, item) => total + item?.price * item.quantity, 0).toFixed(2)
     }
   },
   methods: {

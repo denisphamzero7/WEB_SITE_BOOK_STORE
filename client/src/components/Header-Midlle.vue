@@ -1,9 +1,9 @@
 <template>
   <div class="bg-red-50 hidden md:block">
     <div class="container mx-auto flex items-center justify-between gap-5">
-      <div class="logo w-1/3">
+      <div class="logo w-1/3 rounded-3xl">
         <router-link :to="{ name: 'Home-Page' }">
-          <img src="../assets/logo.png" alt="" class="object-contain w-20 h-20" />
+          <img src="../assets/logo.png" alt="" class="object-contain w-20 h-20 rounded-3xl" />
         </router-link>
       </div>
       <div class="flex w-2/3 ml-6 h-2rem">
@@ -30,7 +30,7 @@
             </router-link>
           </div>
         </div>
-        <div v-else>đăng nhập</div>
+        
       </div>
     </div>
   </div>

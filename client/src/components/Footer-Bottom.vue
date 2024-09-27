@@ -1,82 +1,71 @@
 <template>
-  <div class="container mx-auto py-6 bg-gray-100">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <div></div>
-      <!-- Contact Information -->
-      <div class="bg-white p-4  space-y-4">
-        
-        <img src="../../src/assets/logo.png" alt="Logo" class="w-24">
-        <div>
-          <h1 class="text-xl font-bold text-gray-700">Liên hệ</h1>
-          <div class="space-y-2">
-            <div class="flex justify-between">
+  <footer class="bg-gray-200 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class=" grid lg:grid-cols-4 md:grid-cols-2 gap-4">
+        <!-- Contact Information -->
+        <div class="bg-white p-4  rounded-lg shadow-md ">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Liên hệ</h2>
+          <ul>
+            <li class="mb-2">
               <span class="font-semibold">Địa chỉ:</span>
               <p class="text-gray-600">Hoà Quý - Ngũ Hành Sơn - Đà Nẵng</p>
-            </div>
-            <div class="flex justify-between">
+            </li>
+            <li class="mb-2">
               <span class="font-semibold">Email:</span>
               <p class="text-gray-600">haupham@gmail.com</p>
-            </div>
-            <div class="flex justify-between">
+            </li>
+            <li class="mb-2">
               <span class="font-semibold">Thời gian làm việc:</span>
               <p class="text-gray-600">08:00 - 17:00, Thứ 2 - Thứ 7</p>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
-        <div>
-          <h1 class="text-xl font-bold text-gray-700">Theo dõi chúng tôi</h1>
-          <div class="flex space-x-4 text-3xl">
-            <a href="#"><i class="pi pi-facebook text-blue-600"></i></a>
-            <a href="#"><i class="pi pi-linkedin text-blue-400"></i></a>
-            <a href="#"><i class="pi pi-instagram text-pink-600"></i></a>
-          </div>
+
+        <!-- Product Categories -->
+        <div class="bg-white p-4  rounded-lg shadow-md">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Danh mục sản phẩm</h2>
+          <ul>
+            <li v-for="category in allCategory" :key="category._id" class="mb-2">
+              <a :href="'/category/' + category._id" class="text-gray-600 hover:text-gray-900">{{ category.title }}</a>
+            </li>
+          </ul>
         </div>
-      </div>
 
-      <!-- Product Categories -->
-      <div class="bg-white p-4 flex flex-col items-center space-y-4">
-        <h1 class="text-xl font-bold text-gray-700">Danh mục sản phẩm</h1>
-        <ul class="space-y-2">
-          <li v-for="category in allCategory" :key="category._id" class="py-2 hover:bg-gray-200 cursor-pointer flex items-center gap-2" @click="selectCategory(category._id)">
-            <span>{{ category.title }}</span>
-          </li>
-        </ul>
-      </div>
+        <!-- Policies -->
+        <div class="bg-white p-4  rounded-lg shadow-md">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Chính sách</h2>
+          <ul>
+            <li v-for="policy in allPolicies" :key="policy._id" class="mb-2">
+              <a :href="policy.link" class="text-gray-600 hover:text-gray-900">{{ policy.title }}</a>
+            </li>
+          </ul>
+        </div>
 
-      <!-- Policies -->
-      <div class="bg-white p-4 flex flex-col items-center space-y-4">
-        <h1 class="text-xl font-bold text-gray-700">Chính sách</h1>
-        <ul class="space-y-2">
-          <li v-for="policy in allPolicies" :key="policy._id" class="py-2 hover:bg-gray-200 cursor-pointer">
-            <a :href="policy.link" class="block">{{ policy.title }}</a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Payment Methods -->
-      <div class="bg-white p-4 flex flex-col items-center space-y-4">
-        <h1 class="text-xl font-bold text-gray-700">Thanh toán</h1>
-        <span class="text-gray-600">Hỗ trợ thanh toán qua các cổng</span>
-        <ul class="flex flex-wrap gap-4 justify-center">
-          <li v-for="payment in allPayments" :key="payment._id" class="flex flex-col items-center">
-            <i :class="payment.icon" class="text-4xl mb-2"></i>
-            <a :href="payment.link" class="text-center">{{ payment.title }}</a>
-          </li>
-        </ul>
+        <!-- Payment Methods -->
+        <div class="bg-white p-4  rounded-lg shadow-md">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Thanh toán</h2>
+          <ul class="flex flex-wrap gap-4 justify-center">
+            <li v-for="payment in allPayments" :key="payment._id" class="flex flex-col items-center">
+              <i :class="payment.icon" class="text-4xl mb-2"></i>
+              <a :href="payment.link" class="text-center text-gray-600 hover:text-gray-900">{{ payment.title }}</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
       allPolicies: [
         { _id: 1, title: 'Chính sách bảo mật', link: '/policy/privacy' },
         { _id: 2, title: 'Chính sách vận chuyển', link: '/policy/shipping' },
-        { _id: 3, title: 'Chính sách đổi trả', link: '/policy/return' },
+        { _id: 3, title: 'Chính sách đổi trả', link: '/policy/return' }
       ],
       allPayments: [
         { _id: 1, title: 'PayPal', icon: 'pi pi-paypal text-blue-600', link: 'https://www.paypal.com/home/' },
@@ -107,5 +96,46 @@ export default {
 </script>
 
 <style scoped>
-/* Add any necessary custom styles here */
+/* Custom styles for responsive adjustments */
+@media (max-width: 1024px) {
+  footer {
+    padding: 16px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+.bg-white {
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1.25rem;
+  color: #1a202c;
+}
+
+ul {
+  padding-left: 0;
+}
+
+a {
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #1a202c;
+}
+
+.text-center {
+  text-align: center;
+}
 </style>

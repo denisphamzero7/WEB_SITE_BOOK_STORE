@@ -13,7 +13,7 @@
       </div>
       <div v-else class="text-xs font-semibold flex gap-3 items-center">
         <span>{{ User && User.firstname ? User.firstname : 'Guest' }}</span>
-        <button class="flex items-center gap-1 border-2 p-1" @click="logout">
+        <button class="flex items-center gap-1 border-2 p-1 border-gray-400" @click="logout">
           <span class="pi pi-sign-out"></span>
           <span>Đăng xuất</span>
         </button>

@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <header>sản phẩm</header>
+  
     <div class="my-4">
       <label for="sort" class="mr-2">Sắp xếp theo:</label>
       <select id="sort" name="sort" class="border border-gray-300 rounded-md px-2 py-1" @change="sortProducts">
@@ -8,11 +8,11 @@
       </select>
     </div>
 
-    <div class="bg-blue-300 w-full min-h-screen gap-5  flex-wrap flex justify-center items-center overflow-hidden md:px-10">
+    <div class="bg-blue-300 w-full min-h-screen gap-5  flex-wrap flex justify-center items-center overflow-hidden px-10 py-5">
       <Product class="mt-2" v-for="product in paginatedProduct" :key="product._id" :product="product" />
     </div>
     <div>
-      <Pagination   :totalItems="sortedProducts.length" :itemsPerPage="itemsPerPage" :currentPage="currentPage" @page-changed="changePage" />
+      <Pagination   :totalItems="sortedProducts.length" :itemsPerPage="itemsPerPage" :currentPage="currentPage" @page-changed="changePage" class=" my-5"/>
     </div>
   </div>
 </template>

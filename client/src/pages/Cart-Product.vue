@@ -17,21 +17,18 @@
         />
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full sm:pl-4">
           <div class="flex flex-col w-full">
-            <p class="text-gray-800 font-semibold text-lg">{{ cartItem.product?.name }}</p>
-            <p class="text-gray-500">Giá: {{ cartItem.price }}$</p>
+            <p class="text-gray-800 font-semibold text-lg">{{ cartItem.product?.name||'sai' }}</p>
+            <p class="text-gray-500">Giá: {{ cartItem?.price||'sai' }}$</p>
             <div class="flex items-center mt-2">
               <input
                 type="number"
                 min="1"
+                :max="cartItem.product?.quantity"
                 v-model="cartItem.quantity"
                 class="w-16 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              
               />
-              <button
-                @click.prevent="updatequantity(cartItem)"
-                class="ml-2 px-4 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none"
-              >
-                Cập nhật
-              </button>
+              
             </div>
           </div>
           <button
@@ -82,7 +79,9 @@ export default {
         message: '',
         position: '',
         backgroundcolor: ''
-      }
+      },
+      price:0,
+      quantity:0,
     }
   },
   created() {
@@ -95,7 +94,7 @@ export default {
       return total + cartItem?.price * cartItem.quantity;
     }, 0).toFixed(2);
 
-    console.log("Tổng giá tiền:", total);
+    console.log("Tổng giá tiền:    ngu", total);
     return total;
   }
    
@@ -110,38 +109,43 @@ export default {
       return images;
     },
     async updatequantity(cartItem) {
-      try {
-        const id = cartItem.product._id
-        const newquantity = cartItem.quantity
-        const stock = cartItem.product.quantity
-        
-        if (newquantity <= stock) {
-          const data = { pid: id, quantity: newquantity }
-          await this.addProductToCart(data)
-          this.Toast = {
-            message: 'Cập nhật số lượng thành công!',
-            position: 'bottom-left',
-            backgroundcolor: 'success'
-          }
-          setTimeout(() => {
-            this.fetchcart();
-          }, 2000);
-        } else {
-          this.Toast = {
-            message: `Số lượng hiện tại còn: ${stock}`,
-            position: 'bottom-right',
-            backgroundcolor: 'error'
-          }
-        }
-      } catch (error) {
-        console.log(error)
-        this.Toast = {
-          message: 'Đã xảy ra lỗi khi cập nhật số lượng.',
-          position: 'bottom-left',
-          backgroundcolor: 'error'
-        }
-      }
-    },
+  try {
+    const id = cartItem.product._id;
+    const newquantity = cartItem.quantity;
+    const stock = cartItem?.product.quantity;
+
+    if (newquantity <= stock) {
+      const data = { pid: id, quantity: newquantity };
+      await this.addProductToCart(data);
+
+      // Display success message
+      this.Toast = {
+        message: 'Cập nhật số lượng thành công!',
+        position: 'bottom-left',
+        backgroundcolor: 'success'
+      };
+
+      // Re-fetch the cart to ensure UI is updated
+      setTimeout(() => {
+        this.fetchcart();
+      }, 2000);
+    } else {
+      // Display error if requested quantity exceeds stock
+      this.Toast = {
+        message: `Số lượng hiện tại còn: ${stock}`,
+        position: 'bottom-right',
+        backgroundcolor: 'error'
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    this.Toast = {
+      message: 'Đã xảy ra lỗi khi cập nhật số lượng.',
+      position: 'bottom-left',
+      backgroundcolor: 'error'
+    };
+  }
+},
     async removeItems(cartItem) {
       try {
         await this.deleteProductToCart(cartItem)

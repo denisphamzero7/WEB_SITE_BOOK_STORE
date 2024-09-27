@@ -4,13 +4,14 @@ const state = {
     orders: [],
     ordersadmin:[],
     statusorder:'',
-    order:''
+    order:'',
   };
   
   const mutations = {
     SET_ORDER(state,order){
         state.orders =order;
      },
+  
      SEARCH_ORDER(state,order){
       state.orders =order;
      },

@@ -1,4 +1,4 @@
-```html
+
 <template>
   <div class="card-product cursor-pointer p-2 relative">
     <div class="overflow-hidden relative">
@@ -8,13 +8,13 @@
       </span>
     </div>
     <div
-      class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"
+      class="absolute inset-0 flex items-center justify-center bg-black rounded-xl bg-opacity-50 opacity-0 transition-opacity duration-300"
       :class="{ 'opacity-100': product.hover }"
       @mouseover="product.hover = true"
       @mouseout="product.hover = false"
     >
       <div class="p-2 rounded-lg flex items-center gap-3">
-        <button @click="openProductModal(product)" title="xem nhanh" class="relative">
+        <button @click.prevent="openProductModal(product)" title="xem nhanh" class="relative">
           <div class="tooltip hidden absolute bg-red-500 text-antiquewhite p-1 rounded transform -translate-x-1/2 -top-9 transition-opacity duration-300 after:content-[''] after:absolute after:top-full after:left-1/2 after:-ml-1 after:border-5 after:border-t-red-500 after:border-transparent">
             xem nhanh
           </div>
@@ -29,8 +29,8 @@
       </div>
     </div>
     <div class="p-2 flex flex-col items-center">
-      <h2 class="font-bold text-lg mb-2 line-clamp-1 sm:line-clamp-2 group-hover:line-clamp-none">{{ shortname(product.name) }}</h2>
-      <h3>Author : {{ product.author?.name}}</h3>
+      <h2 class="font-bold text-md mb-2 line-clamp-1 sm:line-clamp-2 group-hover:line-clamp-none">{{ shortname(product.name) }}</h2>
+      <h3 class="font-bold text-sm">Author : {{ product.author?.name}}</h3>
       <div class="flex items-center gap-2">
         <span v-if="product.discount > 0" class="text-sm line-through opacity-75">{{ product.price }}</span>
         <span v-if="product.discount > 0" class="text-xl font-semibold">{{ product.discountedPrice }}</span>
@@ -117,10 +117,19 @@ export default {
       this.Toast.message = '';
     },
     shortname(name) {
-      const maxLength = 20; // Số ký tự tối đa
-      if (name.length <= maxLength) return name;
-      return name.substring(0, maxLength) + '...';
-    },
+  const maxLength = 15; // Số ký tự tối đa
+
+  // Check if name is a valid string
+  if (!name || typeof name !== 'string') {
+    return ''; // Return empty string if name is undefined or not a string
+  }
+
+  // If name is shorter or equal to the maxLength, return it as is
+  if (name.length <= maxLength) return name;
+
+  // Otherwise, truncate the name
+  return name.substring(0, maxLength) + '...';
+},
     async handleWishlistUpdate() {
       try {
         const productId = this.product._id;

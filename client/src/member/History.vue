@@ -96,7 +96,7 @@ export default {
     paginatedOrders() {
       const start = (this.currentPage - 1) * this.itemsPerPage
       const end = start + this.itemsPerPage
-      return this.Order.slice(start, end)
+      return this.Order.slice(start,end)
     }
   },
   methods: {

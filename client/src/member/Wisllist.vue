@@ -3,12 +3,10 @@
     <header class="flex justify-start border-b border-black py-4">
       <h2 class="text-2xl font-semibold">Wish List</h2>
     </header>
-    <div class="py-3 flex  flex-wrap gap-2">
+    <div class="py-3 flex  flex-wrap gap-2" v-if="wishlist">
       <Product v-for="product in wishlist" :key="product._id" :product="product" />
-      <div v-if="!wishlist">
-                <h1>not found</h1>
-      </div>
     </div>
+    <div v-else>wishlist not found</div>
   </div>
 </template>
 

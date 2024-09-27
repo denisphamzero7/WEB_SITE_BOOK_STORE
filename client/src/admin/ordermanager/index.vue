@@ -109,7 +109,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { format } from 'date-fns'
 import Pagination from '../../components/Pagination.vue'
-
+import io from'socket.io-client';
 export default {
   components: {
     Pagination
@@ -119,11 +119,13 @@ export default {
       currentPage: 1,
       itemsPerPage: 4,
       header: 'Orders Manager',
-      searchQuery: ''
+      searchQuery: '',
+      socket: null
     }
   },
   mounted() {
-    this.fetchOrdersByadmin()
+    this.fetchOrdersByadmin();
+    // this.setupSocket();
   },
   computed: {
     ...mapGetters('order', ['Order']),
@@ -146,6 +148,14 @@ export default {
   },
   methods: {
     ...mapActions('order', ['fetchOrdersByadmin', 'deleteOrder', 'updateOrderStatus']),
+    // setupSocket(){
+    //   this.socket = io('http://localhost:3000'); // Make sure the URL matches your server's URL
+    // this.socket.on('statuschanged', (data) => {
+    //   if (data.orderId) {
+    //     this.fetchOrdersByadmin(); // Fetch the updated orders if any order status changes
+    //   }
+    // });
+    // },
     viewOrder(order) {
     this.$router.push({
       name: 'View-Order',
@@ -161,7 +171,6 @@ export default {
     async updateOrder(order) {
       try {
         await this.updateOrderStatus({ oid: order._id, status: order.status })
-        console.log(oid)
       } catch (error) {
         console.error('Error updating order status:', error)
         // Optionally, notify the user about the error
